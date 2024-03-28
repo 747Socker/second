@@ -12,7 +12,7 @@ import {
 } from './StyledFlowerCard';
 
 interface FlowerProps {
-	link?: string;
+	$bouquetUrl?: string;
 	$isMain?: boolean;
 	$isSelected?: boolean;
 	$name?: string;
@@ -23,7 +23,7 @@ interface FlowerProps {
 	clickDelete?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
-export const FlowerCard = ({ link, $isMain, $isSelected, $name, $recommend, $meaning, $isChoice, $isCollapse, clickDelete }: FlowerProps) => {
+export const FlowerCard = ({ $bouquetUrl, $isMain, $isSelected, $name, $recommend, $meaning, $isChoice, $isCollapse, clickDelete }: FlowerProps) => {
 	return (
 		<>
 			<StyledCard $isChoice={$isChoice} $isCollapse={$isCollapse}>
@@ -36,7 +36,7 @@ export const FlowerCard = ({ link, $isMain, $isSelected, $name, $recommend, $mea
 							</StyledCloseButton>
 						)}
 					</div>
-					<StyledRecommend src={link} $isMain={$isMain} $isSelected={$isSelected}></StyledRecommend>
+					<StyledRecommend src={$bouquetUrl} $isMain={$isMain} $isSelected={$isSelected}></StyledRecommend>
 				</StyledFlowerArea>
 				{/* 꽃말 정보 */}
 				<StyledInfo>

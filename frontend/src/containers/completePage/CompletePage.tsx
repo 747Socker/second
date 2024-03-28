@@ -8,8 +8,11 @@ import {
 	DownloadSpan,
 	StyledDownloadButton,
 } from './StyledCompletePage';
+import { bouquetStore } from '../../stores/bouquetStore';
 
 export const CompletePage = () => {
+	const { bouquetUrl } = bouquetStore.getState();
+	
 	return (
 		<>
 			<StyledCompletePage>
@@ -22,7 +25,7 @@ export const CompletePage = () => {
 				</StyledText>
 				<StyledImageArea>
 					<StyledBouquetImage
-						src='https://velog.velcdn.com/images/lee02g29/post/8160a3b5-8123-4b91-95d1-f813781f6000/image.png'
+						src={bouquetUrl}
 						alt='img'
 					></StyledBouquetImage>
 					<StyledDownloadButton>

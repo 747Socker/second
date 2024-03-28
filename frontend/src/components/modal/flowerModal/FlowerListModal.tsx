@@ -96,12 +96,12 @@ export const FlowerListModal = ({ CloseListModal, selectUserFlower }: RecommendP
 										$isChoice={index === clickIndex}
 									>
 										<FlowerCard
+											$bouquetUrl={$item.imgUrl}
 											$isMain={true}
 											$isSelected={false}
 											$recommend={false}
 											$name={$item.name}
 											$meaning={meanings}
-											link='https://velog.velcdn.com/images/lee02g29/post/8160a3b5-8123-4b91-95d1-f813781f6000/image.png'
 										/>
 									</StyledClickArea>
 								);
@@ -111,11 +111,11 @@ export const FlowerListModal = ({ CloseListModal, selectUserFlower }: RecommendP
 						<StyledFixed ref={fixedRef}>
 							{/* 색상 버튼 */}
 							<ColorButtonList>
-								<FlowerColor clickColorButton={() => clickColorButton("White")}></FlowerColor>
-								<FlowerColor $fillColor='#FFE247' $strokeColor='none' clickColorButton={() => clickColorButton("Yellow")}></FlowerColor>
-								<FlowerColor $fillColor='#2194ff' $strokeColor='none' clickColorButton={() => clickColorButton("Blue")}></FlowerColor>
-								<FlowerColor $fillColor='#FF4141' $strokeColor='none' clickColorButton={() => clickColorButton("Red")}></FlowerColor>
-								<FlowerColor $fillColor='#E28AF1' $strokeColor='none' clickColorButton={() => clickColorButton("Pink")}></FlowerColor>
+								<FlowerColor clickColorButton={() => clickColorButton("white")}></FlowerColor>
+								<FlowerColor $fillColor='#FFE247' $strokeColor='none' clickColorButton={() => clickColorButton("yellow")}></FlowerColor>
+								<FlowerColor $fillColor='#a725fd' $strokeColor='none' clickColorButton={() => clickColorButton("purple")}></FlowerColor>
+								<FlowerColor $fillColor='#FF4141' $strokeColor='none' clickColorButton={() => clickColorButton("red")}></FlowerColor>
+								<FlowerColor $fillColor='#E28AF1' $strokeColor='none' clickColorButton={() => clickColorButton("pink")}></FlowerColor>
 							</ColorButtonList>
 							{/* 선택 버튼 */}
 							<div style={{ marginBottom: '2vh' }}>
