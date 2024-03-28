@@ -12,7 +12,14 @@ import { bouquetStore } from '../../stores/bouquetStore';
 
 export const CompletePage = () => {
 	const { bouquetUrl } = bouquetStore.getState();
-	
+
+	const downloadImage =  () => {
+		const link = document.createElement('a');
+		link.href = bouquetUrl;
+		link.setAttribute('download', 'flower_image');
+		link.click();
+	}
+
 	return (
 		<>
 			<StyledCompletePage>
@@ -24,12 +31,11 @@ export const CompletePage = () => {
 					꽃다발이 완성되었어요!{' '}
 				</StyledText>
 				<StyledImageArea>
-					<StyledBouquetImage
-						src={bouquetUrl}
-						alt='img'
-					></StyledBouquetImage>
-					<StyledDownloadButton>
+					<StyledBouquetImage src={bouquetUrl} alt='img'>
+					</StyledBouquetImage>
+					<StyledDownloadButton onClick={downloadImage}>
 						<DownloadSpan className='material-symbols-outlined'>download</DownloadSpan>
+						<a href={bouquetUrl} download></a>
 					</StyledDownloadButton>
 				</StyledImageArea>
 			</StyledCompletePage>

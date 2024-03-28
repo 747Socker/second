@@ -74,14 +74,13 @@ export const GeneratePage = () => {
 		setSelectIdByIndex(new Array(usedFlower.length).fill(-1));
 		setIsUsed(Array.from({ length: usedFlower.length }, () => true));
 
-		console.log("generatePage: usedFlower:", usedFlower);
-		console.log("bouURl",bouquetUrl)
+		// console.log("generatePage: usedFlower:", usedFlower);
+		// console.log("bouURl",bouquetUrl)
 		
 		return unsubscribe;
 	},[usedFlower])
 
 	useEffect(() => {
-		console.log(usedFlowerIndexs)
 		const extractFlower = usedFlowerIndexs
 			.map((index) => allFlowers.find((flower) => flower.flowerId === index))
 			.filter((flower) => flower !== undefined) as FlowerDto[];
@@ -182,7 +181,7 @@ export const GeneratePage = () => {
 							$bouquetUrl={uf[index].imgUrl}
 							$index={index}
 							$name={uf[index].name}
-							$meaning={flowersByMeaning[index].meaning.split(',').map((item) => item.trim())}
+							$meaning={uf[index].meaning.split(',').map((item) => item.trim())}
 							$color={uf[index].color}
 							$recommendByMeaning={flowersByMeaning[index]}
 							$userSelectId={selectIdByIndex[index]}

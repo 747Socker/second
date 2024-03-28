@@ -13,14 +13,14 @@ interface FlowerDto {
 }
 
 interface RecommendProps {
-	$bouquetUrl : string;
-	$index: number;
-	$name: string;
-	$meaning: string[];
-	$color: string;
-	$recommendByMeaning: FlowerDto;
-	$userSelectId: number;
-	$empty: boolean;
+	$bouquetUrl : string; // 꽃다발 이미지 url
+	$index: number; // 현재 꽃의 위치
+	$name: string; // 꽃 이름
+	$meaning: string[]; // 꽃말
+	$color: string; // 꽃 색
+	$recommendByMeaning: FlowerDto; // 꽃말에 의한 추천 꽃 목록
+	$userSelectId: number; // 사용자가 바꾸고자 하는 꽃의 id
+	$empty: boolean; // 현재 칸이 비었는지 여부
 	openListModal: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 	changeFlower: (index: number, newFlower: number) => void;
 	setUsedState: (index: number, state: boolean) => void;
