@@ -15,7 +15,7 @@ interface SSECallbacks {
 const setupSSE = (callbacks: SSECallbacks) => {
     console.log("sse 시작");
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
-    const sseUrl = `${apiUrl}/bouquet/subscribe`;
+    const sseUrl = `${apiUrl}bouquet/subscribe`;
     const eventSource = new EventSource(sseUrl);
 
     eventSource.onopen = () => {
