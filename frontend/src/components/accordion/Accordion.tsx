@@ -20,6 +20,7 @@ interface RecommendProps {
 	$color: string;
 	$recommendByMeaning: FlowerDto;
 	$userSelectId: number;
+	$empty: boolean;
 	openListModal: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 	changeFlower: (index: number, newFlower: number) => void;
 	setUsedState: (index: number, state: boolean) => void;
@@ -33,6 +34,7 @@ export const Accordion = ({
 	$color,
 	$recommendByMeaning,
 	$userSelectId,
+	$empty = false,
 	openListModal,
 	changeFlower,
 	setUsedState
@@ -41,7 +43,7 @@ export const Accordion = ({
 
 	const [active, setActive] = useState(false); // 아코디언 활성 여부
 	const [height, setHeight] = useState('0px'); // 아코디언 메뉴 높이
-	const [empty, setEmpty] = useState(false); // 아코디언 활성 여부
+	const [empty, setEmpty] = useState($empty); // 아코디언 활성 여부
 	const [clickIndex, setClickIndex] = useState<number>(-1); // 클릭 인덱스
 
 	const [recommendIndexByColor, setRecommendIndexByColor] = useState<number>(0); // 색상에 의한 추천 
@@ -75,6 +77,10 @@ export const Accordion = ({
 		setUsedState($index, true);
 		e.stopPropagation();
 	}; // 추가버튼 클릭
+
+	useEffect(() => {
+		setEmpty(false)
+	}, [$recommendByMeaning])
 
 	const meaningsByMeaning = $recommendByMeaning.meaning.split(',').map((item) => item.trim());
 	// 꽃말에 의한 추천, 꽃말만 추출 후 분리
@@ -126,7 +132,7 @@ export const Accordion = ({
 	const flowersBySelect = allFlowers.filter(
     (flower) => flower.flowerId === $userSelectId && $userSelectId !== -1
 	);
-
+	
 	return (
 		<AccordionSection>
 			<div className='accordion__section'>
@@ -199,7 +205,7 @@ export const Accordion = ({
 						)}
 					</div>
 					{/* 모든 꽃 리스트를 보는 버튼(공간) && 꽃 리스트애서 선택한 것이 있으면 보여주는 공간 */}
-					{$userSelectId === -1 ? (
+					{($userSelectId === undefined || $userSelectId === -1) ? (
 						<EmptyFlowerCard $recommend={false} openListModal={openListModal}></EmptyFlowerCard>
 					) : (
 						<div onClick={() => changeFlower($index, $userSelectId)}>

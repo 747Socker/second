@@ -17,8 +17,7 @@ type FlowerDto = {
 };
 
 export const GeneratePage = () => {
-	const { bouquetUrl, usedFlower, recommendByMeaning, allFlowers, setBouquetData, recommendByPopularity } =
-		bouquetStore.getState();
+	const {bouquetUrl,usedFlower, recommendByMeaning, allFlowers, setBouquetData,recommendByPopularity} = bouquetStore();
 	const [isMakeModalOpened, setIsMakeModalOpened] = useState(false);
 	const [isListModalOpened, setIsListModalOpened] = useState(false);
 	// 확인 모달, 꽃 전체 리스트 모달 여부
@@ -26,6 +25,7 @@ export const GeneratePage = () => {
 
 	const [uf, setUf] = useState<FlowerDto[]>([]);
 	const [usedFlowerIndexs, setUsedFlowerIndexs] = useState<number[]>([]);
+	const [flowersByMeaning, setFlowersByMeaning] = useState<FlowerDto[]>([]);
 	const [selectIdByIndex, setSelectIdByIndex] = useState<number[]>([]);
 	const [userSelectIndex, setUserSelectIndex] = useState<number>(-1);
 	const [userSelectId, setUserSelectId] = useState<number>(-1);
@@ -38,44 +38,70 @@ export const GeneratePage = () => {
 
 	useEffect(() => {
 		setupSSE({
-			onOpen: () => setIsLoading(true),
-			onDataReceived: (data) => {
-				setBouquetData(data);
+			onOpen: () => {
+				console.log('SSE 연결이 열림');
+				setIsLoading(true);
+			},
+			onError: (error) => {
+				console.error('SSE 에러 발생', error);
 				setIsLoading(false);
 			},
-			onError: () => setIsLoading(false),
+			events: {
+				firstGenerateEvent: (data) => {
+					bouquetStore.getState().setBouquetData(data);
+					console.log('첫 번째 생성 이벤트 데이터 처리', data);
+					setIsLoading(false);
+				},
+				reGenerateEvent: (data) => {
+					bouquetStore.getState().setBouquetData(data);
+					console.log('재생성 이벤트 데이터 처리', data);
+					setIsLoading(false);
+				}
+			}
 		});
 
-		return () => {};
+		return () => {
+		};
 	}, []);
+
 
 	useEffect(() => {
 		const unsubscribe = bouquetStore.subscribe((usedFlowerState) => {
 			// bouquetStore의 usedFlower 값이 변경될 때마다 호출
+
 			setUsedFlowerIndexs(usedFlowerState.usedFlower.map((flower) => flower));
 		});
 		setSelectIdByIndex(new Array(usedFlower.length).fill(-1));
 		setIsUsed(Array.from({ length: usedFlower.length }, () => true));
 
+		console.log("generatePage: usedFlower:", usedFlower);
+		console.log("bouURl",bouquetUrl)
+		
 		return unsubscribe;
-	}, [usedFlower]);
+	},[usedFlower])
 
 	useEffect(() => {
+		console.log(usedFlowerIndexs)
 		const extractFlower = usedFlowerIndexs
 			.map((index) => allFlowers.find((flower) => flower.flowerId === index))
 			.filter((flower) => flower !== undefined) as FlowerDto[];
 		setUf(extractFlower);
+		// 사용된 꽃 목록 추출
 	}, [usedFlowerIndexs]);
-	// 사용된 꽃 목록 추출
+	
 
-	const flowersByMeaning = recommendByMeaning
-		.map((id) => {
-			return allFlowers.find((flower) => flower.flowerId === id);
-		})
-		.filter((flower) => flower !== undefined) as FlowerDto[];
+	useEffect(() => {
+		const extractByMeaning = recommendByMeaning
+			.map((id) => {
+				return allFlowers.find((flower) => flower.flowerId === id);
+			})
+			.filter((flower) => flower !== undefined) as FlowerDto[];
+
+		setFlowersByMeaning(extractByMeaning)
+	}, [usedFlowerIndexs]);
 	// 꽃말로 추천할 목록 추출
 
-	const openModal = () => {
+	const openModal = () => {	
 		setIsMakeModalOpened(true);
 		html?.classList.add('scroll-locked');
 	}; // 확인 모달 열기
@@ -127,7 +153,6 @@ export const GeneratePage = () => {
 				return flower && isUsed[i] ? flower.name : undefined;
 			})
 			.filter((name) => name !== undefined) as string[];
-
 		// 사용한 꽃 이름만 추출
 
 		await postRegenerateInputs(inputs);
@@ -157,10 +182,11 @@ export const GeneratePage = () => {
 							$bouquetUrl={uf[index].imgUrl}
 							$index={index}
 							$name={uf[index].name}
-							$meaning={uf[index].meaning.split(',').map((item) => item.trim())}
+							$meaning={flowersByMeaning[index].meaning.split(',').map((item) => item.trim())}
 							$color={uf[index].color}
 							$recommendByMeaning={flowersByMeaning[index]}
 							$userSelectId={selectIdByIndex[index]}
+							$empty={!isUsed[index]}
 							openListModal={(e) => openListModal(e, index)}
 							changeFlower={changeFlower}
 							setUsedState={setUsedState}

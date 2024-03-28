@@ -33,8 +33,7 @@ export const bouquetStore = create<BouquetState>((set: SetState<BouquetState>, g
     usedFlower: [],
     recommendByMeaning: [],
     recommendByPopularity: [], //top7 사용 중복 체크 필요
-    allFlowers: [
-    ],
+    allFlowers: [],
 
     setBouquetData: (data: BouquetUpdateData) => {
         const currentState = get();

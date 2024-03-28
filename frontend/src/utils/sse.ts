@@ -1,15 +1,19 @@
 import { bouquetStore } from '../stores/bouquetStore';
-// setupSSE.ts
+
+interface SSEEventCallback {
+    (data: any): void;
+}
 
 interface SSECallbacks {
     onOpen?: () => void;
-    onDataReceived?: (data: any) => void;
     onError?: (error: Event) => void;
+    events?: {
+        [eventType: string]: SSEEventCallback;
+    };
 }
 
 const setupSSE = (callbacks: SSECallbacks) => {
     console.log("sse 시작");
-    const { setBouquetData } = bouquetStore.getState();
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
     const sseUrl = `${apiUrl}/bouquet/subscribe`;
     const eventSource = new EventSource(sseUrl);
@@ -19,21 +23,18 @@ const setupSSE = (callbacks: SSECallbacks) => {
         callbacks.onOpen?.();
     };
 
-    eventSource.addEventListener('firstGenerateEvent', (event) => {
-        console.log("firstGenerateEvent 메시지 수신");
-        const data = JSON.parse(event.data);
-        setBouquetData(data);
-        console.log('서버 데이터', data);
-        callbacks.onDataReceived?.(data);
-    });
-
-    eventSource.addEventListener('reGenerateEvent', (event) => {
-        console.log("reGenerateEvent 메시지 수신");
-        const data = JSON.parse(event.data);
-        setBouquetData(data);
-        console.log('서버 데이터', data);
-        callbacks.onDataReceived?.(data);
-    });
+    // 이벤트 유형별로 콜백 함수를 등록
+    if (callbacks.events) {
+        for (const eventType in callbacks.events) {
+            const eventCallback = callbacks.events[eventType];
+            eventSource.addEventListener(eventType, (event) => {
+                console.log(`${eventType} 메시지 수신`);
+                const data = JSON.parse(event.data);
+                console.log('서버 데이터', data);
+                eventCallback(data);
+            });
+        }
+    }
 
     eventSource.onerror = (error) => {
         console.error('SSE error:', error);
