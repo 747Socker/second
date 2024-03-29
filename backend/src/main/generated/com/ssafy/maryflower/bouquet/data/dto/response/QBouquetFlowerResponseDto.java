@@ -13,8 +13,8 @@ public class QBouquetFlowerResponseDto extends ConstructorExpression<BouquetFlow
 
     private static final long serialVersionUID = -696700890L;
 
-    public QBouquetFlowerResponseDto(com.querydsl.core.types.Expression<Long> memberId, com.querydsl.core.types.Expression<Long> bouquetId, com.querydsl.core.types.Expression<String> imageUrl, com.querydsl.core.types.Expression<? extends java.util.List<com.ssafy.maryflower.bouquet.data.entity.Flower>> flowers) {
-        super(BouquetFlowerResponseDto.class, new Class<?>[]{long.class, long.class, String.class, java.util.List.class}, memberId, bouquetId, imageUrl, flowers);
+    public QBouquetFlowerResponseDto(com.querydsl.core.types.Expression<Long> memberId, com.querydsl.core.types.Expression<Long> bouquetId, com.querydsl.core.types.Expression<String> imageUrl, com.querydsl.core.types.Expression<java.time.LocalDateTime> createDateTime, com.querydsl.core.types.Expression<? extends java.util.List<Long>> flowerIds) {
+        super(BouquetFlowerResponseDto.class, new Class<?>[]{long.class, long.class, String.class, java.time.LocalDateTime.class, java.util.List.class}, memberId, bouquetId, imageUrl, createDateTime, flowerIds);
     }
 
 }

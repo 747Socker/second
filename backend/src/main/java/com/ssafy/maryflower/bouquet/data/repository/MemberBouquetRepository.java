@@ -9,6 +9,5 @@ import java.util.List;
 
 public interface MemberBouquetRepository extends JpaRepository<MemberBouquet, Long> {
   MemberBouquet findByMemberAndBouquet(Member member, Bouquet bouquet);
-  MemberBouquet deleteAllByBouquet(Bouquet bouquet);
   List<MemberBouquet> findAllByBouquet(Bouquet bouquet);
 }

@@ -21,5 +21,4 @@ public class FlowerBouquet {
     @JoinColumn(name = "bouquet_id")
     private Bouquet bouquet;
 
-
 }

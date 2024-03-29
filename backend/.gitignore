@@ -38,6 +38,13 @@ out/
 
 ### application.yml ###
 application-secret.yml
+application-test.yml
+
+## h2 db ##
+data.mv.db
 
 ### querydsl ###
 **/generated
+
+
+.idea/

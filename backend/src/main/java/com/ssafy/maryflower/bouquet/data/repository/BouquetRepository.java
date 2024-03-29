@@ -6,8 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface BouquetRepository extends JpaRepository<Bouquet,Long> {
+public interface BouquetRepository extends JpaRepository<Bouquet,Long>, BouquetRepositoryCustom {
   Optional<Bouquet> findById(Long bouquetId);
   Bouquet findByBouquetId(Long bouquetId);
   Bouquet findByBouquetIdAndMember(Long bouquetId, Member member);
+
 }

@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenProvider {
 
-//    private JwtRedisRepository jwtRedisRepository;
     private Key key;
     private long accessTokenValidityInSeconds;
     private long refreshTokenValidityInSeconds;
@@ -75,10 +74,6 @@ public class JwtTokenProvider {
 
         String encryptedRefreshToken = aes128Util.encryptAes(refreshToken);
 
-        // refreshToken redis에 저장
-//        jwtRedisRepository.save(
-//                KeyUtil.getRefreshTokenKey(authentication.getName()),
-//                refreshToken, refreshTokenValidityInSeconds);
 
         return JwtToken.builder()
                 .grantType("Bearer")
