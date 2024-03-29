@@ -63,7 +63,7 @@ export const SortButton = styled.button<clickProp>`
 font-family: 'Cafe 24 Oneprettynight-v2.0';
 
 	width: 40vw;
-	height: 8vh;
+	height: 6vh;
 
 	border: none;
 	border-radius: 15px;
@@ -81,6 +81,10 @@ font-family: 'Cafe 24 Oneprettynight-v2.0';
 
 	@media (min-width: 1024px) {
 		font-size: 1.9rem;
+
+		@media (min-height: 768px) {
+			font-size: 1.7rem;
+		}
 	}
 
 `
@@ -94,10 +98,10 @@ export const BouquetListGrid = styled.div`
 	grid-template-columns: repeat(2, 1fr);
 	grid-template-rows: repeat(2, 1fr);
 
-	@media (min-width: 1024px) {
-		grid-template-columns: repeat(3, 1fr);
-		grid-template-rows: repeat(2, 1fr);
-	}
+		@media (min-width: 1024px) {
+			grid-template-columns: repeat(3, 1fr);
+			grid-template-rows: repeat(2, 1fr);
+		}
 
 	@media (min-width: 1440px) {
 		grid-template-columns: repeat(4, 1fr);
@@ -115,6 +119,13 @@ export const BouquetListGrid = styled.div`
 	// place-items: center start;
 `; // 이미지 영역 그리드
 
+export const StyledImageArea = styled.div`
+	position: relative;
+
+	display: 'flex';
+	flex-direction: 'column';
+`; // 이미지 영역
+
 export const StyledBouquetImage = styled.img`
 	width: 145px;
 	height: 145px;
@@ -124,11 +135,80 @@ export const StyledBouquetImage = styled.img`
 		height: 120px;
 	}
 
+	@media (min-width: 568px) {
+		width: 170px;
+		height: 170px;
+	}
+
 	@media (min-width: 768px) {
 		width: 250px;
 		height: 250px;
+
+		@media (max-height: 768px) {
+			width: 200px;
+			height: 200px;
+		}
 	}
 
 	border-radius: 15px;
 	background-color: aliceblue;
 `; // 꽃다발 이미지
+
+export const DownloadSpan = styled.span`
+	&.material-symbols-outlined {
+		color: #000000;
+		font-size: 28px;
+
+		@media (min-width: 768px) {
+			font-size: 36px;
+		}
+
+		font-variation-settings:
+			'FILL' 0,
+			'wght' 100,
+			'GRAD' 0,
+			'opsz' 24;
+	}
+`; // 다운로드 span 
+
+export const StyledDownloadButton = styled.button`
+	position: absolute;
+
+	right: 10px;
+	top: 105px;
+
+	@media (max-width: 320px) {
+		right: 5px;
+		top: 80px;
+	}
+
+	@media (min-width: 568px) {
+		right: 10px;
+		top: 125px;
+	}
+
+	@media (min-width: 768px) {
+		right: 10px;
+		top: 190px;
+
+		@media (max-height: 768px) {
+			top: 150px
+		} 
+
+	}
+	
+	border-radius: 20%;
+	background-color: rgba(255, 255, 255, 0.5);
+
+
+	border: none;
+
+	&:hover {
+		background-color: #efefef;
+		${DownloadSpan} {
+			color: #4a4a4a;
+			transition: color 0.3s ease;
+		} // 호버시 배경색 및 다운로드 span 색상 변경 
+	}
+`; // 다운로드 버튼 
+

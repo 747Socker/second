@@ -15,7 +15,7 @@ interface SSECallbacks {
 const setupSSE = (callbacks: SSECallbacks) => {
     console.log("sse 시작");
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
-    const sseUrl = `${apiUrl}bouquet/subscribe`;
+    const sseUrl = `${apiUrl}/bouquet/subscribe`;
     const eventSource = new EventSource(sseUrl);
 
     eventSource.onopen = () => {
@@ -29,7 +29,13 @@ const setupSSE = (callbacks: SSECallbacks) => {
             const eventCallback = callbacks.events[eventType];
             eventSource.addEventListener(eventType, (event) => {
                 console.log(`${eventType} 메시지 수신`);
-                const data = JSON.parse(event.data);
+                console.log("수신된 데이터: ", event.data);
+                let data;
+                if (eventType === 'middleImageSendEvent') {
+                    data = event.data; // raw string 데이터 그대로 사용
+                } else {
+                    data = JSON.parse(event.data); // 기존 JSON 파싱 유지
+                }
                 console.log('서버 데이터', data);
                 eventCallback(data);
             });
@@ -39,7 +45,7 @@ const setupSSE = (callbacks: SSECallbacks) => {
     eventSource.onerror = (error) => {
         console.error('SSE error:', error);
         callbacks.onError?.(error);
-        eventSource.close();
+        // eventSource.close();
     };
 };
 

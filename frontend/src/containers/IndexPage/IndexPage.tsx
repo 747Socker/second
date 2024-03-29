@@ -45,7 +45,7 @@ export const IndexPage: React.FC = () => {
 		<>
 			<StyledIndexPage>
 				{/* 로그인 헤더 */}
-				<Header link='https://src.hidoc.co.kr/image/lib/2022/11/15/1668491763670_0.jpg'></Header>
+				<Header></Header>
 				{/* 헤더를 제외한 영역 */}
 				<StyledBox>
 					<StyledImage src={mainFlower}></StyledImage>
@@ -92,9 +92,6 @@ export const IndexPage: React.FC = () => {
 					{/* 만들기 버튼 */}
 					<CustomButton $make={true} onClick={handleSubmit}>
 						만들기
-					</CustomButton>
-					<CustomButton onClick={disconn}>
-						sse 연결해제
 					</CustomButton>
 				</StyledBox>
 			</StyledIndexPage>

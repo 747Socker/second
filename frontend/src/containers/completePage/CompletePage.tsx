@@ -9,9 +9,16 @@ import {
 	StyledDownloadButton,
 } from './StyledCompletePage';
 import { bouquetStore } from '../../stores/bouquetStore';
+import { useEffect, useState } from 'react';
 
 export const CompletePage = () => {
 	const { bouquetUrl } = bouquetStore.getState();
+	const [bouquetImg, setBouquetImg] = useState(bouquetUrl)
+	
+	useEffect(() => {
+		console.log(bouquetUrl)
+		setBouquetImg(bouquetUrl)
+	}, [bouquetUrl])
 
 	const downloadImage =  () => {
 		const link = document.createElement('a');
@@ -23,7 +30,7 @@ export const CompletePage = () => {
 	return (
 		<>
 			<StyledCompletePage>
-				<Header link='https://src.hidoc.co.kr/image/lib/2022/11/15/1668491763670_0.jpg'></Header>
+				<Header></Header>
 				<StyledText $marginTop='0vh' $marginBottom='0.5vh'>
 					꽃마리 님에게 전달할{' '}
 				</StyledText>
@@ -31,11 +38,11 @@ export const CompletePage = () => {
 					꽃다발이 완성되었어요!{' '}
 				</StyledText>
 				<StyledImageArea>
-					<StyledBouquetImage src={bouquetUrl} alt='img'>
+					<StyledBouquetImage src={bouquetImg} alt='img'>
 					</StyledBouquetImage>
 					<StyledDownloadButton onClick={downloadImage}>
 						<DownloadSpan className='material-symbols-outlined'>download</DownloadSpan>
-						<a href={bouquetUrl} download></a>
+						<a href={bouquetImg} download></a>
 					</StyledDownloadButton>
 				</StyledImageArea>
 			</StyledCompletePage>

@@ -17,12 +17,12 @@ type FlowerDto = {
 };
 
 export const GeneratePage = () => {
-	const {bouquetUrl,usedFlower, recommendByMeaning, allFlowers, setBouquetData,recommendByPopularity} = bouquetStore();
+	const {bouquetUrl, usedFlower, recommendByMeaning, allFlowers, setBouquetData, setBouquetUrl } = bouquetStore();
 	const [isMakeModalOpened, setIsMakeModalOpened] = useState(false);
 	const [isListModalOpened, setIsListModalOpened] = useState(false);
 	// 확인 모달, 꽃 전체 리스트 모달 여부
-	const [isLoading, setIsLoading] = useState(true);
 
+	//const [bouquetImg, setBouquetImg] = useState("")
 	const [uf, setUf] = useState<FlowerDto[]>([]);
 	const [usedFlowerIndexs, setUsedFlowerIndexs] = useState<number[]>([]);
 	const [flowersByMeaning, setFlowersByMeaning] = useState<FlowerDto[]>([]);
@@ -40,22 +40,22 @@ export const GeneratePage = () => {
 		setupSSE({
 			onOpen: () => {
 				console.log('SSE 연결이 열림');
-				setIsLoading(true);
 			},
 			onError: (error) => {
 				console.error('SSE 에러 발생', error);
-				setIsLoading(false);
 			},
 			events: {
 				firstGenerateEvent: (data) => {
-					bouquetStore.getState().setBouquetData(data);
+					setBouquetData(data);
 					console.log('첫 번째 생성 이벤트 데이터 처리', data);
-					setIsLoading(false);
 				},
 				reGenerateEvent: (data) => {
-					bouquetStore.getState().setBouquetData(data);
+					setBouquetData(data);
 					console.log('재생성 이벤트 데이터 처리', data);
-					setIsLoading(false);
+				},
+				middleImageSendEvent: (data) => {
+					setBouquetUrl(data)
+					// console.log(data)
 				}
 			}
 		});
@@ -64,12 +64,18 @@ export const GeneratePage = () => {
 		};
 	}, []);
 
+	// useEffect(() => {
+	// 	console.log(bouquetUrl)
+	// 	setBouquetImg(bouquetStore.getState().bouquetUrl)
+	// }, [bouquetUrl])
+
 
 	useEffect(() => {
 		const unsubscribe = bouquetStore.subscribe((usedFlowerState) => {
 			// bouquetStore의 usedFlower 값이 변경될 때마다 호출
 
-			setUsedFlowerIndexs(usedFlowerState.usedFlower.map((flower) => flower));
+			const limitedUsedFlower = usedFlowerState.usedFlower.slice(0, 3);
+			setUsedFlowerIndexs(limitedUsedFlower.map((flower) => flower));
 		});
 		setSelectIdByIndex(new Array(usedFlower.length).fill(-1));
 		setIsUsed(Array.from({ length: usedFlower.length }, () => true));
@@ -87,7 +93,6 @@ export const GeneratePage = () => {
 		setUf(extractFlower);
 		// 사용된 꽃 목록 추출
 	}, [usedFlowerIndexs]);
-	
 
 	useEffect(() => {
 		const extractByMeaning = recommendByMeaning
@@ -163,15 +168,11 @@ export const GeneratePage = () => {
 		setIsUsed(newState.map((state) => state));
 	}; // 꽃의 사용 여부를 체크 -> 삭제한 경우에는 추출하지 않기 위함
 
-	if (isLoading) {
-		return <div>loading...</div>;
-	}
-
 	return (
 		<>
 			<StyledGeneratePage>
 				{/* 로그인 헤더 */}
-				<Header link='https://src.hidoc.co.kr/image/lib/2022/11/15/1668491763670_0.jpg'></Header>
+				<Header></Header>
 				<StyledBouquetImage src={bouquetUrl} alt='img'></StyledBouquetImage>
 				{/* 최초 추천 꽃 + 변경 추천 꽃 */}
 				{uf.map((item, index) => {
