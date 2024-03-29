@@ -31,6 +31,10 @@ export const StyledBox = styled.div`
 	
 	@media (min-width: 340px) {
 		height: 80vh;
+		
+		@media (max-height: 658px) {
+			height: 85vh;
+		}
 	}
 
 	border-radius: 15px;

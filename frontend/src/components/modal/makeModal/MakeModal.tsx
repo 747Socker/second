@@ -9,6 +9,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import CustomButton from '../../button/CustomButton';
 import { bouquetStore } from '../../../stores/bouquetStore';
+import { useEffect, useState } from 'react';
 
 interface ModalProps {
 	closeModal: () => void;

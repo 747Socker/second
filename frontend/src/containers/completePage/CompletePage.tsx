@@ -23,7 +23,7 @@ export const CompletePage = () => {
 	return (
 		<>
 			<StyledCompletePage>
-				<Header link='https://src.hidoc.co.kr/image/lib/2022/11/15/1668491763670_0.jpg'></Header>
+				<Header></Header>
 				<StyledText $marginTop='0vh' $marginBottom='0.5vh'>
 					꽃마리 님에게 전달할{' '}
 				</StyledText>

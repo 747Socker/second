@@ -5,32 +5,33 @@ import {discon} from "../../api/discon.ts";
 import {postRegenerateInputs} from "../../api/bouquetReCreate.ts";
 
 export const GenerateTestPage = () => {
-    const {bouquetUrl,usedFlower, recommendByMeaning, allFlowers, setBouquetData,recommendByPopularity} = bouquetStore();
+    const {bouquetUrl,usedFlower, recommendByMeaning, allFlowers, setBouquetData, setBouquetUrl} = bouquetStore();
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        setupSSE({
-            onOpen: () => {
-                console.log('SSE 연결이 열림');
-                setIsLoading(true);
-            },
-            onError: (error) => {
-                console.error('SSE 에러 발생', error);
-                setIsLoading(false);
-            },
-            events: {
-                firstGenerateEvent: (data) => {
-                    bouquetStore.getState().setBouquetData(data);
-                    console.log('첫 번째 생성 이벤트 데이터 처리', data);
-                    setIsLoading(false);
-                },
-                reGenerateEvent: (data) => {
-                    bouquetStore.getState().setBouquetData(data);
-                    console.log('재생성 이벤트 데이터 처리', data);
-                    setIsLoading(false);
-                }
-            }
-        });
+
+	useEffect(() => {
+		setupSSE({
+			onOpen: () => {
+				console.log('SSE 연결이 열림');
+			},
+			onError: (error) => {
+				console.error('SSE 에러 발생', error);
+			},
+			events: {
+				firstGenerateEvent: (data) => {
+					setBouquetData(data);
+					console.log('첫 번째 생성 이벤트 데이터 처리', data);
+				},
+				reGenerateEvent: (data) => {
+					setBouquetData(data);
+					console.log('재생성 이벤트 데이터 처리', data);
+				},
+				middleImageSendEvent: (data) => {
+					setBouquetUrl(data)
+					console.log(data)
+				}
+			}
+		});
 
         return () => {
         };

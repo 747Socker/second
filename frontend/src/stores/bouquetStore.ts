@@ -16,6 +16,7 @@ interface BouquetState {
     recommendByPopularity: number[];
     allFlowers: FlowerDto[];
     setBouquetData: (data: BouquetUpdateData) => void;
+    setBouquetUrl: (data: string) => void;
 }
 
 interface BouquetUpdateData {
@@ -43,4 +44,5 @@ export const bouquetStore = create<BouquetState>((set: SetState<BouquetState>, g
             allFlowers: data.allFlowers ? data.allFlowers : currentState.allFlowers, // allFlowers만 현재 상태로 유지
         });
     },
+    setBouquetUrl: (data:string) => set(state => ({ bouquetUrl: data })),
 }));
