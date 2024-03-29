@@ -9,16 +9,9 @@ import {
 	StyledDownloadButton,
 } from './StyledCompletePage';
 import { bouquetStore } from '../../stores/bouquetStore';
-import { useEffect, useState } from 'react';
 
 export const CompletePage = () => {
 	const { bouquetUrl } = bouquetStore.getState();
-	const [bouquetImg, setBouquetImg] = useState(bouquetUrl)
-	
-	useEffect(() => {
-		console.log(bouquetUrl)
-		setBouquetImg(bouquetUrl)
-	}, [bouquetUrl])
 
 	const downloadImage =  () => {
 		const link = document.createElement('a');
@@ -38,11 +31,11 @@ export const CompletePage = () => {
 					꽃다발이 완성되었어요!{' '}
 				</StyledText>
 				<StyledImageArea>
-					<StyledBouquetImage src={bouquetImg} alt='img'>
+					<StyledBouquetImage src={bouquetUrl} alt='img'>
 					</StyledBouquetImage>
 					<StyledDownloadButton onClick={downloadImage}>
 						<DownloadSpan className='material-symbols-outlined'>download</DownloadSpan>
-						<a href={bouquetImg} download></a>
+						<a href={bouquetUrl} download></a>
 					</StyledDownloadButton>
 				</StyledImageArea>
 			</StyledCompletePage>
