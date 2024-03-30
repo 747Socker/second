@@ -8,6 +8,7 @@ import { bouquetStore } from '../../stores/bouquetStore';
 import CustomButton from '../../components/button/CustomButton';
 import { postRegenerateInputs } from '../../api/bouquetReCreate.ts';
 import setupSSE from '../../utils/sse.ts';
+
 type FlowerDto = {
 	flowerId: number;
 	name: string;
@@ -22,7 +23,6 @@ export const GeneratePage = () => {
 	const [isListModalOpened, setIsListModalOpened] = useState(false);
 	// 확인 모달, 꽃 전체 리스트 모달 여부
 
-	//const [bouquetImg, setBouquetImg] = useState("")
 	const [uf, setUf] = useState<FlowerDto[]>([]);
 	const [usedFlowerIndexs, setUsedFlowerIndexs] = useState<number[]>([]);
 	const [flowersByMeaning, setFlowersByMeaning] = useState<FlowerDto[]>([]);
@@ -63,12 +63,6 @@ export const GeneratePage = () => {
 		return () => {
 		};
 	}, []);
-
-	// useEffect(() => {
-	// 	console.log(bouquetUrl)
-	// 	setBouquetImg(bouquetStore.getState().bouquetUrl)
-	// }, [bouquetUrl])
-
 
 	useEffect(() => {
 		const unsubscribe = bouquetStore.subscribe((usedFlowerState) => {
