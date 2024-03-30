@@ -43,12 +43,15 @@ export const FindFlowerShopPage = () => {
 		} else {
 			setState((prev) => ({
 				...prev,
-				errMsg: 'geolocation을 사용할수 없어요..',
+				errMsg: '사용자의 위치를 찾을 수 없습니다.',
 				isLoading: false,
 			}));
 		}
-
 	}, []);
+
+  useEffect(() => {
+    searchPlaces('꽃집'); 
+  }, [state])
 
 	// 카테고리 검색으로 주변 위치 검색하기
 	const searchPlaces = (keyword: string) => {
@@ -76,9 +79,7 @@ export const FindFlowerShopPage = () => {
 			options, // 검색 옵션 전달
 		);
 	};
-
-  searchPlaces('꽃집');
-
+  
 	return (
 		<>
 			<StyledFindFlowerShopPage>
