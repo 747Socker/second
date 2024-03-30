@@ -6,8 +6,9 @@ import { MakeModal } from '../../components/modal/makeModal/MakeModal';
 import { FlowerListModal } from '../../components/modal/flowerModal/FlowerListModal';
 import { bouquetStore } from '../../stores/bouquetStore';
 import CustomButton from '../../components/button/CustomButton';
-import { postRegenerateInputs } from '../../api/bouquetReCreate.ts';
-import setupSSE from '../../utils/sse.ts';
+import { postRegenerateInputs } from '../../api/bouquetReCreate.ts'
+import setupSSE from "../../utils/sse.ts";
+import {useLocalAxios} from "../../utils/axios.ts";
 type FlowerDto = {
 	flowerId: number;
 	name: string;
@@ -20,6 +21,9 @@ export const GeneratePage = () => {
 	const {bouquetUrl, usedFlower, recommendByMeaning, allFlowers, setBouquetData, setBouquetUrl } = bouquetStore();
 	const [isMakeModalOpened, setIsMakeModalOpened] = useState(false);
 	const [isListModalOpened, setIsListModalOpened] = useState(false);
+	
+	const [isLoading, setIsLoading] = useState(true);
+	const axiosInstance = useLocalAxios(true);
 	// 확인 모달, 꽃 전체 리스트 모달 여부
 
 	//const [bouquetImg, setBouquetImg] = useState("")
@@ -82,7 +86,7 @@ export const GeneratePage = () => {
 
 		// console.log("generatePage: usedFlower:", usedFlower);
 		// console.log("bouURl",bouquetUrl)
-		
+
 		return unsubscribe;
 	},[usedFlower])
 
@@ -105,7 +109,7 @@ export const GeneratePage = () => {
 	}, [usedFlowerIndexs]);
 	// 꽃말로 추천할 목록 추출
 
-	const openModal = () => {	
+	const openModal = () => {
 		setIsMakeModalOpened(true);
 		html?.classList.add('scroll-locked');
 	}; // 확인 모달 열기
@@ -122,7 +126,7 @@ export const GeneratePage = () => {
 		html?.classList.add('scroll-locked');
 	}; // 꽃 전체 리스트 모달 열기
 
-	const CloseListModal = () => { 
+	const CloseListModal = () => {
 		setIsListModalOpened(false);
 		html?.classList.remove('scroll-locked');
 	}; // 꽃 전체 리스트 모달 닫기
@@ -159,7 +163,7 @@ export const GeneratePage = () => {
 			.filter((name) => name !== undefined) as string[];
 		// 사용한 꽃 이름만 추출
 
-		await postRegenerateInputs(inputs);
+		await postRegenerateInputs(inputs,axiosInstance);
 	};
 
 	const setUsedState = (index: number, state: boolean) => {
@@ -202,7 +206,7 @@ export const GeneratePage = () => {
 			</StyledGeneratePage>
 
 			{/* 완성 확인 모달 */}
-			{isMakeModalOpened && <MakeModal closeModal={closeModal}></MakeModal>}
+			{isMakeModalOpened && <MakeModal closeModal={closeModal} axiosInstance={axiosInstance}></MakeModal>}
 			{/* 꽃 전체 리스트 모달 */}
 			{isListModalOpened && (
 				<FlowerListModal CloseListModal={CloseListModal} selectUserFlower={selectUserFlower}></FlowerListModal>

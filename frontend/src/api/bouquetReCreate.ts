@@ -1,14 +1,8 @@
-import axios from 'axios';
+import { AxiosInstance } from 'axios';
 
-
-
-const api = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL,
-});
-
-export const postRegenerateInputs = async (inputs: String[]): Promise<void> => {
+export const postRegenerateInputs = async (inputs: string[], axiosInstance: AxiosInstance): Promise<void> => {
     try {
-        const response = await api.post('/bouquet/re-generate', inputs);
+        const response = await axiosInstance.post('/bouquet/re-generate', inputs );
         console.log(response.data);
     } catch (error) {
         console.error(error);
