@@ -18,13 +18,14 @@ import {
 import React, { ChangeEvent, useState } from 'react';
 import setupSSE from "../../utils/sse.ts";
 import {discon} from "../../api/discon.ts";
+import {useLocalAxios} from "../../utils/axios.ts";
 export const IndexPage: React.FC = () => {
 	const [whom, setWhom] = useState<string>('');
 	const [situation, setSituation] = useState<string>('');
 	const [message, setMessage] = useState<string>('');
 
 	const navigate = useNavigate();
-
+	const axiosInstance = useLocalAxios(true);
 	const handleChangeOptionValues = (e: ChangeEvent<HTMLTextAreaElement>, setValue: (value: string) => void) => {
 		const { value } = e.target;
 
@@ -37,7 +38,7 @@ export const IndexPage: React.FC = () => {
 		await discon();
 	}
 	const handleSubmit = async () => {
-		await postTextInputs({ whom, situation, message });
+		await postTextInputs({ whom, situation, message }, axiosInstance);
 		navigate('/generate');
 	};
 

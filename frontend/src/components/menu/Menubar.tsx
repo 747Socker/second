@@ -18,8 +18,8 @@ export const Menu = () => {
 		navigate('/list');
 	};
 
-  const goToFind = () => {
-		navigate('/find');
+  const goToMap = () => {
+		navigate('/map');
 	};
 
   return (
@@ -37,7 +37,7 @@ export const Menu = () => {
         <StyledMenuText>검색</StyledMenuText>
       </StyledMenuButton>
 
-      <StyledMenuButton>
+      <StyledMenuButton onClick={goToMap}>
         {/* 꽃집 찾기 버튼과 아이콘 */}
         <StyledMenuImg src={find} alt="find"></StyledMenuImg>
         <StyledMenuText>꽃집 찾기</StyledMenuText>
