@@ -211,7 +211,6 @@ export const GeneratePage = () => {
 				{/* 최초 추천 꽃 + 변경 추천 꽃 */}
 				{uf.map((item, index) => {
 					return (
-						<>
 						<Accordion
 							key={index}
 							$bouquetUrl={uf[index].imgUrl}
@@ -227,8 +226,6 @@ export const GeneratePage = () => {
 							setUsedState={setUsedState}
 							deleteAddedFlower={(e) => deleteAddedFlower(e, index)}
 						></Accordion>
-						<div>테스트</div>
-						</>			
 					);
 				})}
 				{!isMaking && (
