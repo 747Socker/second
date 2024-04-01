@@ -89,6 +89,9 @@ export const GeneratePage = () => {
 					}
 				}
 			});
+			return () => {
+				setIsMaking(false);
+			};	
 		}
 	}, [requestId]);
 
