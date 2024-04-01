@@ -5,9 +5,10 @@ import { LoginPage } from './containers/loginPage/LoginPage.tsx';
 import { GeneratePage } from './containers/generatePage/GeneratePage.tsx';
 import { CompletePage } from './containers/completePage/CompletePage.tsx';
 import { BouquetListPage } from './containers/bouquetListPage/BouquetListPage.tsx';
-import { GenerateTestPage} from "./containers/generatePage/GenerateTestPage.tsx";
+// import { GenerateTestPage} from "./containers/generatePage/GenerateTestPage.tsx";
 import {KakaoCallback} from "./utils/Kakao.tsx";
 import { FindFlowerShopPage } from './containers/findFlowerShop/FindFlowerShopPage.tsx';
+import {BouquetListTestPage} from "./containers/bouquetListPage/BoutquetListTestPage.tsx";
 
 export default function App() {
 	function setScreenSize() {
@@ -39,10 +40,11 @@ export default function App() {
 						<Route path='/' element={<LoginPage />} />
 						<Route path='/index' element={<IndexPage />} />
 						<Route path='/generate' element={<GeneratePage />} />
-						<Route path='/gtp' element={<GenerateTestPage />} />
+						{/*<Route path='/gtp' element={<GenerateTestPage />} />*/}
 						<Route path='/complete' element={<CompletePage />} />
 						<Route path='/list' element={<BouquetListPage />} />
 						<Route path='/map' element={<FindFlowerShopPage />} />
+						<Route path='/ltp' element={<BouquetListTestPage />}/>
 					</Route>
 					<Route>
 						<Route path="/auth/kakao" element={<KakaoCallback />} />

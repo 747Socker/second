@@ -5,10 +5,11 @@ import { useEffect, useState } from 'react';
 import { MakeModal } from '../../components/modal/makeModal/MakeModal';
 import { FlowerListModal } from '../../components/modal/flowerModal/FlowerListModal';
 import { bouquetStore } from '../../stores/bouquetStore';
-import { postRegenerateInputs } from '../../api/bouquetReCreate.ts';
-import { useLocalAxios } from '../../utils/axios.ts';
 import CustomButton from '../../components/button/CustomButton';
-import setupSSE from '../../utils/sse.ts';
+import { postRegenerateInputs } from '../../api/bouquetReCreate.ts'
+import setupSSE from "../../utils/sse.ts";
+import {useLocalAxios} from "../../utils/axios.ts";
+import {useLocation} from "react-router-dom";
 import white from '../../assets/images/white.jpg';
 
 type FlowerDto = {
@@ -18,6 +19,18 @@ type FlowerDto = {
 	meaning: string;
 	imgUrl: string;
 };
+interface SSEEventCallback {
+	(data: any): void;
+}
+
+interface SSECallbacks {
+	onOpen?: () => void;
+	onError?: (error: Event) => void;
+	events?: {
+		[eventType: string]: SSEEventCallback;
+	};
+}
+
 
 export const GeneratePage = () => {
 	const { bouquetUrl, usedFlower, recommendByMeaning, allFlowers, setBouquetData, setBouquetUrl } = bouquetStore();
@@ -43,37 +56,41 @@ export const GeneratePage = () => {
 	// 유저가 선택한 꽃의 id
 
 	const html = document.querySelector('html');
-
+	const location = useLocation();
+	const { requestId } = location.state;
 	useEffect(() => {
-		setupSSE({
-			onOpen: () => {
-				setIsMaking(true);
-				console.log('SSE 연결이 열림');
-			},
-			onError: (error) => {
-				console.error('SSE 에러 발생', error);
-			},
-			events: {
-				firstGenerateEvent: (data) => {
-					setBouquetData(data);
-					console.log('첫 번째 생성 이벤트 데이터 처리', data);
-					setIsMaking(false);
+		console.log("useEffect");
+		console.log(requestId);
+		if (requestId) {
+			console.log("if");
+			setupSSE(requestId, {
+				onOpen: () => {
+					setIsMaking(true);
+					console.log('SSE 연결이 열림');
 				},
-				reGenerateEvent: (data) => {
-					setBouquetData(data);
-					console.log('재생성 이벤트 데이터 처리', data);
-					setIsMaking(false);
+				onError: (error: Event) => {
+					console.error('SSE 에러 발생', error);
 				},
-				middleImageSendEvent: (data) => {
-					setBouquetUrl(data);
-				},
-			},
-		});
-
-		return () => {
-			setIsMaking(false);
-		};
-	}, []);
+				events: {
+					firstGenerateEvent: (data: any) => { // data 타입을 any로 지정, 더 구체적인 타입이 있다면 변경 가능
+						setBouquetData(data);
+						console.log('첫 번째 생성 이벤트 데이터 처리', data);
+						setIsMaking(false);
+					},
+					reGenerateEvent: (data: any) => { // data 타입을 any로 지정
+						setBouquetData(data);
+						console.log('재생성 이벤트 데이터 처리', data);
+						setIsMaking(false);
+					},
+					middleImageSendEvent: (data: any) => { // data 타입을 any로 지정
+						setBouquetUrl(data);
+						console.log('중간 이미지 전송 이벤트 데이터 처리', data);
+						setIsMaking(false);
+					}
+				}
+			});
+		}
+	}, [requestId]);
 
 	useEffect(() => {
 		const unsubscribe = bouquetStore.subscribe((usedFlowerState) => {
