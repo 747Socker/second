@@ -1,12 +1,14 @@
 import { Menu } from '../../components/menu/Menubar';
 import { Header } from '../../components/header/Headerbar';
 import { StyledFindFlowerShopPage, StyledText } from './StyledFindFlowerShop';
-import { Map, MapMarker } from 'react-kakao-maps-sdk';
+import { Map, MapMarker, MapTypeControl, ZoomControl, CustomOverlayMap } from 'react-kakao-maps-sdk';
 import { useEffect, useState } from 'react';
+import './InfoWindow.css';
 const { kakao } = window;
 
 export const FindFlowerShopPage = () => {
 	const [search, setSearch] = useState<any>([]);
+	const [isOpen, setIsOpen] = useState<boolean[]>([]);
 
 	// 기본 위치 상태
 	const [state, setState] = useState({
@@ -49,9 +51,9 @@ export const FindFlowerShopPage = () => {
 		}
 	}, []);
 
-  useEffect(() => {
-    searchPlaces('꽃집'); 
-  }, [state])
+	useEffect(() => {
+		searchPlaces('꽃집');
+	}, [state]);
 
 	// 카테고리 검색으로 주변 위치 검색하기
 	const searchPlaces = (keyword: string) => {
@@ -69,7 +71,7 @@ export const FindFlowerShopPage = () => {
 		// Places 서비스의 keywordSearch 메소드 호출
 		ps.keywordSearch(
 			keyword,
-			(data : any[], status, _pagination) => {
+			(data: any[], status, _pagination) => {
 				if (status === kakao.maps.services.Status.OK) {
 					setSearch(data); // 검색 결과를 search 상태에 저장
 				} else {
@@ -79,7 +81,7 @@ export const FindFlowerShopPage = () => {
 			options, // 검색 옵션 전달
 		);
 	};
-  
+
 	return (
 		<>
 			<StyledFindFlowerShopPage>
@@ -87,7 +89,9 @@ export const FindFlowerShopPage = () => {
 				<StyledText $marginTop='0vh' $marginBottom='1.5vh'>
 					내 주변 꽃집 찾기
 				</StyledText>
-				<Map center={state.center} style={{ width: '80vw', height: '50vh' }} level={5} draggable={false}>
+				<Map center={state.center} style={{ width: '80vw', height: '50vh' }} level={5} draggable={true}>
+					<MapTypeControl position={'TOPRIGHT'} />
+					<ZoomControl position={'RIGHT'} />
 					<MapMarker
 						position={state.center}
 						image={{
@@ -98,19 +102,67 @@ export const FindFlowerShopPage = () => {
 							},
 						}}
 					/>
-					{search.map((data : any) => (
-						<MapMarker
-							key={data.id}
-							position={{ lat: data.y, lng: data.x }}
-							image={{
-								src: 'https://cdn-icons-png.flaticon.com/128/2098/2098567.png',
-								size: {
-									width: 35,
-									height: 35,
-								},
-							}}
-						/>
-					))}
+					{search.map((data: any, index: number) => {
+						return (
+							<>
+								<MapMarker
+									key={data.id}
+									position={{ lat: data.y, lng: data.x }}
+									image={{
+										src: 'https://cdn-icons-png.flaticon.com/128/2098/2098567.png',
+										size: {
+											width: 35,
+											height: 35,
+										},
+									}}
+									onClick={() => {
+										const newIsOpen = [...isOpen];
+										newIsOpen[index] = true;
+										setIsOpen(newIsOpen);
+									}}
+								></MapMarker>
+
+								{isOpen[index] && (
+									<CustomOverlayMap position={{ lat: data.y, lng: data.x }}>
+										<div className='wrap'>
+											<div className='info'>
+												<div className='title'>
+													{data.place_name}
+													<div
+														className='close'
+														onClick={() => {
+															const newIsOpen = [...isOpen];
+															newIsOpen[index] = false;
+															setIsOpen(newIsOpen);
+														}}
+														title='닫기'
+													></div>
+												</div>
+												<div className='body'>
+													<div className='desc'>
+														<div className='ellipsis'>{data.road_address_name}</div>
+														<div className='jibun ellipsis'>(지번) {data.address_name}</div>
+														<div className='jibun ellipsis'>(Tel) {data.phone}</div>
+														<div>
+															<a
+																href={data.place_url}
+																target='_blank'
+																className='link'
+																rel='noreferrer'
+															>
+																홈페이지
+															</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										;
+									</CustomOverlayMap>
+								)}
+							</>
+						);
+					})}
 				</Map>
 			</StyledFindFlowerShopPage>
 			<Menu></Menu>
