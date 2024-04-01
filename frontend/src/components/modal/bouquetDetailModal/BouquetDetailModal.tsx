@@ -35,10 +35,6 @@ export const BouquetDetailModal = ({ closeModal, $flowers }: ModalProps) => {
 					{/* 그 외 영역 */}
 					<StyledConfirmInfo>
 						<TextAlign $align='left'>
-							{/* 꽃 이름 */}
-							{/* <StyledName $marginLeft='1.0vw' $marginBottom='0.8vh' $textSize='1.4rem'>
-								사용된 꽃
-							</StyledName> */}
 							{/* 구성된 꽃 목록을 loop */}
 							{$flowers &&
 								$flowers.length > 0 &&
