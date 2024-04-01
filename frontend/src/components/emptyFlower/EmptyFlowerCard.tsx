@@ -28,7 +28,7 @@ export const EmptyFlowerCard = ({$recommend, clickAddFlower, openListModal } : F
 				{/* 꽃말 정보 - 추천을 받을 수 있는 꽃일 때 */}
 				{$recommend && (<StyledInfo onClick={clickAddFlower}>
 					<StyledAddButton >
-						<AddSpan className='material-symbols-outlined'>add_circle</AddSpan>
+						<AddSpan className='material-symbols-outlined'>undo</AddSpan>
 					</StyledAddButton>
 				</StyledInfo>)}
 				

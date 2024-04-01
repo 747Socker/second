@@ -10,6 +10,8 @@ import { postRegenerateInputs } from '../../api/bouquetReCreate.ts'
 import setupSSE from "../../utils/sse.ts";
 import {useLocalAxios} from "../../utils/axios.ts";
 import {useLocation} from "react-router-dom";
+import white from '../../assets/images/white.jpg';
+
 type FlowerDto = {
 	flowerId: number;
 	name: string;
@@ -31,7 +33,7 @@ interface SSECallbacks {
 
 
 export const GeneratePage = () => {
-	const {bouquetUrl, usedFlower, recommendByMeaning, allFlowers, setBouquetData, setBouquetUrl } = bouquetStore();
+	const { bouquetUrl, usedFlower, recommendByMeaning, allFlowers, setBouquetData, setBouquetUrl } = bouquetStore();
 	const [isMakeModalOpened, setIsMakeModalOpened] = useState(false);
 	const [isListModalOpened, setIsListModalOpened] = useState(false);
 
@@ -47,6 +49,8 @@ export const GeneratePage = () => {
 	const [userSelectIndex, setUserSelectIndex] = useState<number>(-1);
 	const [userSelectId, setUserSelectId] = useState<number>(-1);
 	const [isUsed, setIsUsed] = useState<boolean[]>([true, true, true]);
+	const [isMaking, setIsMaking] = useState<boolean>(false);
+	const [regeneCounter, setRegeneCounter] = useState<number>(0);
 	// 유저가 선택한 각 꽃 별 추가 꽃
 	// 선택한 꽃의 위치(0, 1, 2)
 	// 유저가 선택한 꽃의 id
@@ -61,6 +65,7 @@ export const GeneratePage = () => {
 			console.log("if");
 			setupSSE(requestId, {
 				onOpen: () => {
+					setIsMaking(true);
 					console.log('SSE 연결이 열림');
 				},
 				onError: (error: Event) => {
@@ -70,14 +75,17 @@ export const GeneratePage = () => {
 					firstGenerateEvent: (data: any) => { // data 타입을 any로 지정, 더 구체적인 타입이 있다면 변경 가능
 						setBouquetData(data);
 						console.log('첫 번째 생성 이벤트 데이터 처리', data);
+						setIsMaking(false);
 					},
 					reGenerateEvent: (data: any) => { // data 타입을 any로 지정
 						setBouquetData(data);
 						console.log('재생성 이벤트 데이터 처리', data);
+						setIsMaking(false);
 					},
 					middleImageSendEvent: (data: any) => { // data 타입을 any로 지정
 						setBouquetUrl(data);
 						console.log('중간 이미지 전송 이벤트 데이터 처리', data);
+						setIsMaking(false);
 					}
 				}
 			});
@@ -95,7 +103,7 @@ export const GeneratePage = () => {
 		setIsUsed(Array.from({ length: usedFlower.length }, () => true));
 
 		return unsubscribe;
-	},[usedFlower])
+	}, [usedFlower]);
 
 	useEffect(() => {
 		const extractFlower = usedFlowerIndexs
@@ -112,7 +120,7 @@ export const GeneratePage = () => {
 			})
 			.filter((flower) => flower !== undefined) as FlowerDto[];
 
-		setFlowersByMeaning(extractByMeaning)
+		setFlowersByMeaning(extractByMeaning);
 	}, [usedFlowerIndexs]);
 	// 꽃말로 추천할 목록 추출
 
@@ -162,6 +170,10 @@ export const GeneratePage = () => {
 	}; // 추가하려는 꽃의 id
 
 	const handleSubmit = async () => {
+		setIsMaking(true);
+		if(regeneCounter === 2) alert('마지막 재생성입니다.')
+		setRegeneCounter(regeneCounter + 1);
+
 		const inputs = usedFlowerIndexs
 			.map((index, i) => {
 				const flower = allFlowers.find((flower) => flower.flowerId === index);
@@ -170,7 +182,7 @@ export const GeneratePage = () => {
 			.filter((name) => name !== undefined) as string[];
 		// 사용한 꽃 이름만 추출
 
-		await postRegenerateInputs(inputs,axiosInstance);
+		await postRegenerateInputs(inputs, axiosInstance);
 	};
 
 	const setUsedState = (index: number, state: boolean) => {
@@ -179,12 +191,23 @@ export const GeneratePage = () => {
 		setIsUsed(newState.map((state) => state));
 	}; // 꽃의 사용 여부를 체크 -> 삭제한 경우에는 추출하지 않기 위함
 
+	const deleteAddedFlower = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => {
+		const newState = [...selectIdByIndex];
+		newState[index] = -1;
+		setSelectIdByIndex(newState.map((state) => state));
+		e.stopPropagation();
+	};
+
+	const onErrorImg = (e: any) => {
+		e.target.src = white;
+	};
+
 	return (
 		<>
 			<StyledGeneratePage>
 				{/* 로그인 헤더 */}
 				<Header></Header>
-				<StyledBouquetImage src={bouquetUrl} alt='img'></StyledBouquetImage>
+				<StyledBouquetImage src={bouquetUrl} onError={onErrorImg}></StyledBouquetImage>
 				{/* 최초 추천 꽃 + 변경 추천 꽃 */}
 				{uf.map((item, index) => {
 					return (
@@ -201,15 +224,23 @@ export const GeneratePage = () => {
 							openListModal={(e) => openListModal(e, index)}
 							changeFlower={changeFlower}
 							setUsedState={setUsedState}
+							deleteAddedFlower={(e) => deleteAddedFlower(e, index)}
 						></Accordion>
 					);
 				})}
-				<div style={{ marginBottom: '2vh' }}>
-					<CustomButton $check={true} onClick={openModal}>
-						확인
-					</CustomButton>
-					<CustomButton onClick={handleSubmit}>재생성</CustomButton>
-				</div>
+				{!isMaking && (
+					<div style={{ marginBottom: '2vh' }}>
+						<CustomButton $check={true} onClick={openModal}>
+							확인
+						</CustomButton>
+						{regeneCounter <= 3 && <CustomButton onClick={handleSubmit}>재생성</CustomButton>}
+					</div>
+				)}
+				{isMaking && (
+					<div style={{ marginBottom: '2vh' }}>
+						<CustomButton $check={true}>생성 중...</CustomButton>
+					</div>
+				)}
 			</StyledGeneratePage>
 
 			{/* 완성 확인 모달 */}

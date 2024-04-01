@@ -27,7 +27,7 @@ export const AccordionMenu = styled.div`
 
 	&:hover,
 	&.active {
-		background-color: #f3f3f3;
+		background-color: #FFD9E5;
 	}
 `; // 아코디언 상단 메뉴
 
@@ -48,6 +48,7 @@ export const AccordionIcon = styled.div`
 export const AccordionContent = styled.div`
 	overflow: hidden;
 	transition: height 0.8s ease;
+	background-color: #fff1f1;
 
 	@media (min-width: 768px) {
 		margin-top: 2vh;
