@@ -19,11 +19,13 @@ import React, { ChangeEvent, useState } from 'react';
 import setupSSE from "../../utils/sse.ts";
 import {discon} from "../../api/discon.ts";
 import {useLocalAxios} from "../../utils/axios.ts";
+import { useRequestStore } from '../../stores/requestID.ts';
+
 export const IndexPage: React.FC = () => {
 	const [whom, setWhom] = useState<string>('');
 	const [situation, setSituation] = useState<string>('');
 	const [message, setMessage] = useState<string>('');
-
+	const setRequestID = useRequestStore((state) => state.setRequestId);
 	const navigate = useNavigate();
 	const axiosInstance = useLocalAxios(true);
 	const handleChangeOptionValues = (e: ChangeEvent<HTMLTextAreaElement>, setValue: (value: string) => void) => {
@@ -34,14 +36,15 @@ export const IndexPage: React.FC = () => {
 		}
 	}; // 줄 수 제한
 
-	const disconn = async () => {
-		await discon();
-	}
 	const handleSubmit = async () => {
-		await postTextInputs({ whom, situation, message }, axiosInstance);
-		navigate('/generate');
+		const requestId = await postTextInputs({ whom, situation, message }, axiosInstance);
+		if (requestId) {
+			console.log("index resp",requestId);
+			navigate('/generate', { state: { requestId } });
+		} else {
+			console.log("Request ID를 받아오는 데 실패");
+		}
 	};
-
 	return (
 		<>
 			<StyledIndexPage>

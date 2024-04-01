@@ -1,4 +1,3 @@
-import { bouquetStore } from '../stores/bouquetStore';
 
 interface SSEEventCallback {
     (data: any): void;
@@ -12,12 +11,12 @@ interface SSECallbacks {
     };
 }
 
-const setupSSE = (callbacks: SSECallbacks) => {
+const setupSSE = (requestId: string, callbacks: SSECallbacks) => {
     console.log("sse 시작");
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
-    const sseUrl = `${apiUrl}bouquet/subscribe`;
+    const sseUrl = `${apiUrl}bouquet/subscribe?requestId=${requestId}`;
+    console.log("sseurl", sseUrl);
     const eventSource = new EventSource(sseUrl);
-
     eventSource.onopen = () => {
         console.log("SSE 연결 상태:", eventSource.readyState);
         callbacks.onOpen?.();
