@@ -150,7 +150,7 @@ export const FindFlowerShopPage = () => {
 																className='link'
 																rel='noreferrer'
 															>
-																홈페이지
+																상세정보
 															</a>
 														</div>
 													</div>

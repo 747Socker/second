@@ -13,7 +13,7 @@ interface FlowerDto {
 }
 
 interface RecommendProps {
-	$bouquetUrl : string; // 꽃다발 이미지 url
+	$bouquetUrl: string; // 꽃다발 이미지 url
 	$index: number; // 현재 꽃의 위치
 	$name: string; // 꽃 이름
 	$meaning: string[]; // 꽃말
@@ -24,6 +24,7 @@ interface RecommendProps {
 	openListModal: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 	changeFlower: (index: number, newFlower: number) => void;
 	setUsedState: (index: number, state: boolean) => void;
+	deleteAddedFlower: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 export const Accordion = ({
@@ -37,7 +38,8 @@ export const Accordion = ({
 	$empty = false,
 	openListModal,
 	changeFlower,
-	setUsedState
+	setUsedState,
+	deleteAddedFlower,
 }: RecommendProps) => {
 	const { allFlowers, recommendByPopularity } = bouquetStore.getState();
 
@@ -46,7 +48,7 @@ export const Accordion = ({
 	const [empty, setEmpty] = useState($empty); // 아코디언 활성 여부
 	const [clickIndex, setClickIndex] = useState<number>(-1); // 클릭 인덱스
 
-	const [recommendIndexByColor, setRecommendIndexByColor] = useState<number>(0); // 색상에 의한 추천 
+	const [recommendIndexByColor, setRecommendIndexByColor] = useState<number>(0); // 색상에 의한 추천
 	const [recommendIndexByPopularity, setRecommendIndexByPopularity] = useState<number>(0); // 인기에 의한 추천
 
 	const content = useRef<HTMLDivElement>(null);
@@ -58,7 +60,7 @@ export const Accordion = ({
 	const toggleAccordion = () => {
 		setActive(!active);
 
-		if(active) {
+		if (active) {
 			setClickIndex(-1);
 		} else {
 			setClickIndex($index);
@@ -79,10 +81,12 @@ export const Accordion = ({
 	}; // 추가버튼 클릭
 
 	useEffect(() => {
-		setEmpty(false)
-	}, [$recommendByMeaning])
+		setEmpty(false);
+	}, [$recommendByMeaning]);
 
-	const meaningsByMeaning = $recommendByMeaning.meaning.split(',').map((item) => item.trim());
+	const meaningsByMeaning = $recommendByMeaning.meaning
+		? $recommendByMeaning.meaning.split(',').map((item) => item.trim())
+		: [];
 	// 꽃말에 의한 추천, 꽃말만 추출 후 분리
 
 	const flowersByColor = allFlowers.filter(
@@ -119,7 +123,8 @@ export const Accordion = ({
 	useEffect(() => {
 		let randomIndex = Math.floor(Math.random() * flowersByPopularity.length);
 
-		while (flowersByPopularity.length <= randomIndex) randomIndex = Math.floor(Math.random() * flowersByPopularity.length);
+		while (flowersByPopularity.length <= randomIndex)
+			randomIndex = Math.floor(Math.random() * flowersByPopularity.length);
 		setRecommendIndexByPopularity(randomIndex);
 	}, []); // 인기도에 의한 추천 리스트 중 랜덤으로 하나 추천
 
@@ -129,10 +134,8 @@ export const Accordion = ({
 			: [];
 	// 인기도에 의한 추천, 선정된 꽃의 꽃말 분리
 
-	const flowersBySelect = allFlowers.filter(
-    (flower) => flower.flowerId === $userSelectId && $userSelectId !== -1
-	);
-	
+	const flowersBySelect = allFlowers.filter((flower) => flower.flowerId === $userSelectId && $userSelectId !== -1);
+
 	return (
 		<AccordionSection>
 			<div className='accordion__section'>
@@ -167,15 +170,17 @@ export const Accordion = ({
 						이 꽃은 어떠세요?
 					</AccordionText>
 					{/* 꽃말에 의한 추천 */}
-					<div onClick={() => changeFlower($index, $recommendByMeaning.flowerId)}>
-						<FlowerCard
-							$bouquetUrl={$recommendByMeaning.imgUrl}
-							$isMain={false}
-							$name={$recommendByMeaning.name}
-							$meaning={meaningsByMeaning}
-							$isCollapse={true}
-						/>
-					</div>
+					{Array.isArray($meaning) && $meaning.length > 0 && (
+						<div onClick={() => changeFlower($index, $recommendByMeaning.flowerId)}>
+							<FlowerCard
+								$bouquetUrl={$recommendByMeaning.imgUrl}
+								$isMain={false}
+								$name={$recommendByMeaning.name}
+								$meaning={meaningsByMeaning}
+								$isCollapse={true}
+							/>
+						</div>
+					)}
 					{/* 색상에 의한 추천 */}
 					<div onClick={() => changeFlower($index, flowersByColor[recommendIndexByColor].flowerId)}>
 						{flowersByColor.length > recommendIndexByColor ? (
@@ -205,16 +210,18 @@ export const Accordion = ({
 						)}
 					</div>
 					{/* 모든 꽃 리스트를 보는 버튼(공간) && 꽃 리스트애서 선택한 것이 있으면 보여주는 공간 */}
-					{($userSelectId === undefined || $userSelectId === -1) ? (
+					{$userSelectId === undefined || $userSelectId === -1 ? (
 						<EmptyFlowerCard $recommend={false} openListModal={openListModal}></EmptyFlowerCard>
 					) : (
 						<div onClick={() => changeFlower($index, $userSelectId)}>
 							<FlowerCard
 								$bouquetUrl={flowersBySelect[0].imgUrl}
 								$isMain={false}
+								$userSelect={true}
 								$name={flowersBySelect[0].name}
 								$meaning={flowersBySelect[0].meaning.split(',').map((item) => item.trim())}
 								$isCollapse={true}
+								deleteAddedFlower={deleteAddedFlower}
 							/>
 						</div>
 					)}

@@ -19,11 +19,13 @@ interface FlowerProps {
 	$recommend?: boolean;
 	$meaning?: String[];
 	$isChoice?: boolean;
-	$isCollapse? :boolean;
+	$isCollapse?: boolean;
+	$userSelect?: boolean;
 	clickDelete?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+	deleteAddedFlower?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
-export const FlowerCard = ({ $bouquetUrl, $isMain, $isSelected, $name, $recommend, $meaning, $isChoice, $isCollapse, clickDelete }: FlowerProps) => {
+export const FlowerCard = ({ $bouquetUrl, $isMain, $isSelected, $name, $recommend, $meaning, $isChoice, $isCollapse, $userSelect, clickDelete, deleteAddedFlower }: FlowerProps) => {
 	return (
 		<>
 			<StyledCard $isChoice={$isChoice} $isCollapse={$isCollapse}>
@@ -32,6 +34,11 @@ export const FlowerCard = ({ $bouquetUrl, $isMain, $isSelected, $name, $recommen
 					<div style={{ marginLeft: 'auto' }}>
 						{!$isMain && $recommend && (
 							<StyledCloseButton onClick={clickDelete}>
+								<CloseSpan className='material-symbols-outlined'>cancel</CloseSpan>
+							</StyledCloseButton>
+						)}
+						{!$isMain && $userSelect && (
+							<StyledCloseButton onClick={deleteAddedFlower}>
 								<CloseSpan className='material-symbols-outlined'>cancel</CloseSpan>
 							</StyledCloseButton>
 						)}
