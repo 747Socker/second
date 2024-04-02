@@ -56,7 +56,10 @@ export const BouquetDetailModal = ({ closeModal, $flowers }: ModalProps) => {
 					<StyledConfirmInfo>
 						<TextAlign $align='left'>
 							<StyledName $marginLeft='5vw' $marginRight='5vw' $marginTop='0.8vh'>
-								{$flowers.whom} - {$flowers.situation}
+								{'Dear.'} {$flowers.whom}
+							</StyledName>
+							<StyledName $marginLeft='5vw' $marginRight='5vw' $marginTop='0.8vh'>
+								{$flowers.situation}
 							</StyledName>
 							<StyledMeaning $marginLeft='6vw' $marginRight='6vw' $marginTop='0.5vh'>
 								{' '}
