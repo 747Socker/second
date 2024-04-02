@@ -58,6 +58,7 @@ export const GeneratePage = () => {
 	const html = document.querySelector('html');
 	const location = useLocation();
 	const { requestId } = location.state;
+	
 	useEffect(() => {
 		console.log("useEffect");
 		console.log(requestId);
@@ -67,6 +68,7 @@ export const GeneratePage = () => {
 			setupSSE(requestId, {
 				onOpen: () => {				
 					console.log('SSE 연결이 열림');
+					setIsMaking(true);
 				},
 				onError: (error: Event) => {
 					console.error('SSE 에러 발생', error);
@@ -104,6 +106,8 @@ export const GeneratePage = () => {
 		});
 		setSelectIdByIndex(new Array(usedFlower.length).fill(-1));
 		setIsUsed(Array.from({ length: usedFlower.length }, () => true));
+
+		setIsMaking(false);
 
 		return unsubscribe;
 	}, [usedFlower]);
