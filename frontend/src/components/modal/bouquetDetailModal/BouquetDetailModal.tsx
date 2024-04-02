@@ -30,11 +30,10 @@ export const BouquetDetailModal = ({ closeModal, $flowers }: ModalProps) => {
 					{/* 그 외 영역 */}
 					<StyledConfirmInfo>
 						<TextAlign $align='left'>
-							{/* 구성된 꽃 목록을 loop */}
-							<StyledName $marginLeft='1.0vw' $marginTop='0.8vh'>
+							<StyledName $marginLeft='5vw' $marginRight='5vw' $marginTop='0.8vh'>
 								{$flowers.whom} - {$flowers.situation}
 							</StyledName>
-							<StyledMeaning $marginLeft='0.5vw' $marginTop='0.5vh'>
+							<StyledMeaning $marginLeft='6vw' $marginRight='6vw' $marginTop='0.5vh'>
 								{' '}
 								{'ㆍ'} {$flowers.message}{' '}
 							</StyledMeaning>
