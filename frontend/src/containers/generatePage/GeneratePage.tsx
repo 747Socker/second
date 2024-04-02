@@ -75,10 +75,12 @@ export const GeneratePage = () => {
 					firstGenerateEvent: (data: any) => { // data 타입을 any로 지정, 더 구체적인 타입이 있다면 변경 가능
 						setBouquetData(data);
 						console.log('첫 번째 생성 이벤트 데이터 처리', data);
+						setIsMaking(false);
 					},
 					reGenerateEvent: (data: any) => { // data 타입을 any로 지정
 						setBouquetData(data);
 						console.log('재생성 이벤트 데이터 처리', data);
+						setIsMaking(false);
 					},
 					middleImageSendEvent: (data: any) => { // data 타입을 any로 지정
 						setBouquetUrl(data);
@@ -233,7 +235,7 @@ export const GeneratePage = () => {
 						<CustomButton $check={true} onClick={openModal}>
 							확인
 						</CustomButton>
-						{regeneCounter <= 3 && <CustomButton onClick={handleSubmit}>재생성</CustomButton>}
+						{regeneCounter < 3 && <CustomButton onClick={handleSubmit}>재생성</CustomButton>}
 					</div>
 				)}
 				{isMaking && (

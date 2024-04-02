@@ -53,10 +53,12 @@ export const SortBar = styled.div`
 	width: 100vw;
 	display: flex;
 
-	justify-content: space-around;
+	justify-content: flex-end;
 	align-items: center;
+
+	margin-right: 7vh;
 	
-	margin-top: 1vh;
+	margin-top: 2vh;
 `// 정렬 위치
 
 export const SortButton = styled.button<clickProp>`
@@ -92,6 +94,8 @@ font-family: 'Cafe 24 Oneprettynight-v2.0';
 export const BouquetListGrid = styled.div`
 	width: 100vw;
 	height: 100vh;
+
+	margin-top: 2vh;
 
 	display: grid;
 
@@ -129,6 +133,8 @@ export const StyledImageArea = styled.div`
 export const StyledBouquetImage = styled.img`
 	width: 145px;
 	height: 145px;
+
+	border: solid 1px #e2e2e2;
 
 	@media (max-width: 320px) {
 		width: 120px;

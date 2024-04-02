@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import { DropdownMain, DropdownBar, DropdownMenu, DropdownMenuText } from './StyledSearchDropDown';
+import { DropdownMain, DropdownBar, DropdownMenu, DropdownMenuText } from '../searchDropDown/StyledSearchDropDown';
 
-interface typeProp {
-	setType: (value : string) => void;
+interface sortProp {
+	setOrderBy: (value : string) => void;
 }
 
-export const SearchDropdown = ({ setType } : typeProp) => {
+export const SortDropdown = ({setOrderBy} : sortProp) => {
 	const [isVisible, setIsVisible] = useState(false);
-	const [selectedMenu, setSelectedMenu] = useState("분류")
-	const menu = ["꽃 이름", "꽃말", "텍스트"]
-	const values = ["NAME", "MEANING", "TEXT"]
+	const [selectedMenu, setSelectedMenu] = useState("정렬")
+	const menu = ["최신순", "인기순"]
+	const values = ["RECENT", "LIKE"]
 
 	const toggleDropdown = () => {
 		setIsVisible((prev) => !prev);
@@ -17,13 +17,13 @@ export const SearchDropdown = ({ setType } : typeProp) => {
 
 	const setMenu = (index : number) => {
 		setSelectedMenu(menu[index])
-		setType(values[index])
+		setOrderBy(values[index])
 		setIsVisible((prev) => !prev);
 	} // 드롭다운 메뉴 선택 -> 이후 드롭다운 메뉴 닫기
 	
 	return (
 		<>
-			<DropdownMain>
+			<DropdownMain style={{zIndex:'1'}}>
 				{/* 드롭다운 상단 위치 - 누른 것으로 바뀜 */}
 				<DropdownBar onClick={toggleDropdown}>{selectedMenu}
 				</DropdownBar>
