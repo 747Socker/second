@@ -14,24 +14,60 @@ import {
 } from './StyledBouquetListPage';
 import { BouquetDetailModal } from '../../components/modal/bouquetDetailModal/BouquetDetailModal';
 import { SearchDropdown } from '../../components/dropdown/searchDropDown/SearchDropDown';
-import { ChangeEvent, useState } from 'react';
+import { SortDropdown } from '../../components/dropdown/sortDropDown/SortDropDown';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { useBouquetList } from '../../api/useBouquetList';
+import { Bouquet } from '../../types/BouquetList'
 import CustomButton from '../../components/button/CustomButton';
+import white from '../../assets/images/white.jpg'
 
 export const BouquetListPage = () => {
-	const [isBouquetDetailModal, setIsBouquetDetailModal] = useState(false);
-	const [extractedItems, setExtractedItems] = useState<RecommendItem[]>([]);
-	const [isLatestClick, setIsLatestClick] = useState<boolean>(true);
+	const [type, setType] = useState('');
+	const [searchKeyword, setSearchKeyword] = useState('');
+	const [orderBy, setOrderBy] = useState('');
+	const [searchParams, setSearchParams] = useState({
+			type: '',
+			searchKeyword: '',
+			orderBy: ''
+	});
+	const { bouquets, loading, error, hasMore,fetchMoreData  } = useBouquetList(searchParams.type, searchParams.searchKeyword, searchParams.orderBy);
 
-	const [inputValue, setInputValue] = useState('');
+	const observer = useRef<IntersectionObserver | null>(null);
+	const lastBouquetElementRef = useCallback((node: Element | null) => {
+			if (loading || !hasMore) return;
+			if (observer.current) observer.current.disconnect();
+			observer.current = new IntersectionObserver(entries => {
+					if (entries[0].isIntersecting && hasMore && !loading) {
+							fetchMoreData ();
+					}
+			});
+			if (node) observer.current.observe(node);
+	}, [loading, hasMore]);
+
+	useEffect(() => {
+		setSearchParams({
+			type: type, 
+			searchKeyword: searchKeyword, 
+			orderBy: orderBy 
+		});
+	}, [searchKeyword, orderBy, type])
+
+	const handleSearch = () => {
+			setSearchParams({
+        type: type, 
+        searchKeyword: searchKeyword, 
+        orderBy: orderBy 
+			});
+	};
+
+	const [isBouquetDetailModal, setIsBouquetDetailModal] = useState(false);
+	const [extractedItems, setExtractedItems] = useState<Bouquet>();
 
 	const html = document.querySelector('html');
 
-	const openModal = (index: number) => {
+	const openModal = (bouquet : Bouquet) => {
 		setIsBouquetDetailModal(true);
-
-		const startIdx = index * 3;
-		const endIdx = startIdx + 3;
-		setExtractedItems(recommendArrays.slice(startIdx, endIdx));
+		setExtractedItems(bouquet)
 
 		html?.classList.add('scroll-locked');
 	};
@@ -41,18 +77,6 @@ export const BouquetListPage = () => {
 		html?.classList.remove('scroll-locked');
 	};
 
-	const getInputValue = (e: ChangeEvent<HTMLInputElement>) => {
-		setInputValue(e.target.value);
-	};
-
-	const sortByLatest = () => {
-		setIsLatestClick(true);
-	};
-
-	const sortByPopularity = () => {
-		setIsLatestClick(false);
-	};
-
 	const downloadImage = (url: string) => {
 		const link = document.createElement('a');
 		link.href = url;
@@ -60,88 +84,11 @@ export const BouquetListPage = () => {
 		link.click();
 	};
 
-	type MyArrayItem = {
-		$url: string;
-		$name: string;
-		$meaning: string[];
+	const onErrorImg = (e: any) => {
+		e.target.src = white;
 	};
 
-	type RecommendItem = {
-		$url: string;
-		$name: string;
-		$meaning: string[];
-	};
-
-	const arrayOfArrays: MyArrayItem[] = [
-		{
-			$url: 'https://velog.velcdn.com/images/lee02g29/post/f8a6d452-d26a-48e9-9465-aaea784da297/image.jpg',
-			$name: '레이스 플라워',
-			$meaning: ['정열', '화려함', '당신의 사랑이 나를 행복하게 합니다'],
-		},
-		{
-			$url: 'https://velog.velcdn.com/images/lee02g29/post/f8a6d452-d26a-48e9-9465-aaea784da297/image.jpg',
-			$name: '레이스',
-			$meaning: ['정열', '화려함', '당신의 사랑이 나를 행복하게 합니다'],
-		},
-		{
-			$url: 'https://velog.velcdn.com/images/lee02g29/post/f8a6d452-d26a-48e9-9465-aaea784da297/image.jpg',
-			$name: '플라워',
-			$meaning: ['정열', '화려함', '당신의 사랑이 나를 행복하게 합니다'],
-		},
-		{
-			$url: 'https://velog.velcdn.com/images/lee02g29/post/f8a6d452-d26a-48e9-9465-aaea784da297/image.jpg',
-			$name: '플라워2',
-			$meaning: ['정열', '화려함', '당신의 사랑이 나를 행복하게 합니다'],
-		},
-	];
-
-	const recommendArrays: RecommendItem[] = [
-		{
-			$url: 'https://velog.velcdn.com/images/lee02g29/post/f8a6d452-d26a-48e9-9465-aaea784da297/image.jpg',
-			$name: '레이스 플라워0',
-			$meaning: ['정열', '화려함', '당신의 사랑이 나를 행복하게 합니다'],
-		},
-		{
-			$url: 'https://velog.velcdn.com/images/lee02g29/post/f8a6d452-d26a-48e9-9465-aaea784da297/image.jpg',
-			$name: '레이스 플라워1',
-			$meaning: ['정열', '화려함', '당신의 사랑이 나를 행복하게 합니다'],
-		},
-		{
-			$url: 'https://velog.velcdn.com/images/lee02g29/post/f8a6d452-d26a-48e9-9465-aaea784da297/image.jpg',
-			$name: '레이스 플라워2',
-			$meaning: ['정열', '화려함', '당신의 사랑이 나를 행복하게 합니다'],
-		},
-		{
-			$url: 'https://velog.velcdn.com/images/lee02g29/post/f8a6d452-d26a-48e9-9465-aaea784da297/image.jpg',
-			$name: '레이스 플라워3',
-			$meaning: ['정열', '화려함', '당신의 사랑이 나를 행복하게 합니다'],
-		},
-		{
-			$url: 'https://velog.velcdn.com/images/lee02g29/post/f8a6d452-d26a-48e9-9465-aaea784da297/image.jpg',
-			$name: '레이스 플라워4',
-			$meaning: ['정열', '화려함', '당신의 사랑이 나를 행복하게 합니다'],
-		},
-		{
-			$url: 'https://velog.velcdn.com/images/lee02g29/post/f8a6d452-d26a-48e9-9465-aaea784da297/image.jpg',
-			$name: '레이스 플라워5',
-			$meaning: ['정열', '화려함', '당신의 사랑이 나를 행복하게 합니다'],
-		},
-		{
-			$url: 'https://velog.velcdn.com/images/lee02g29/post/f8a6d452-d26a-48e9-9465-aaea784da297/image.jpg',
-			$name: '레이스 플라워6',
-			$meaning: ['정열', '화려함', '당신의 사랑이 나를 행복하게 합니다'],
-		},
-		{
-			$url: 'https://velog.velcdn.com/images/lee02g29/post/f8a6d452-d26a-48e9-9465-aaea784da297/image.jpg',
-			$name: '레이스 플라워7',
-			$meaning: ['정열', '화려함', '당신의 사랑이 나를 행복하게 합니다'],
-		},
-		{
-			$url: 'https://velog.velcdn.com/images/lee02g29/post/f8a6d452-d26a-48e9-9465-aaea784da297/image.jpg',
-			$name: '레이스 플라워8',
-			$meaning: ['정열', '화려함', '당신의 사랑이 나를 행복하게 합니다'],
-		},
-	];
+	
 
 	return (
 		<>
@@ -150,37 +97,33 @@ export const BouquetListPage = () => {
 				<Header></Header>
 				{/* 검색창 - 드롭다운, 입력창, 버튼 순 */}
 				<SearchBar>
-					<SearchDropdown></SearchDropdown>
-					<StyledInput onChange={getInputValue}></StyledInput>
-					<CustomButton $check={true}>검색</CustomButton>
+					<SearchDropdown setType={setType}></SearchDropdown>
+					<StyledInput onChange={e => setSearchKeyword(e.target.value)}></StyledInput>
+					<CustomButton $check={true} onClick={handleSearch}>검색</CustomButton>
 				</SearchBar>
 				<SortBar>
-					<SortButton onClick={sortByLatest} $clicked={isLatestClick}>
-						최신순
-					</SortButton>
-					<SortButton onClick={sortByPopularity} $clicked={!isLatestClick}>
-						인기순
-					</SortButton>
+					<SortDropdown setOrderBy={setOrderBy}></SortDropdown>
 				</SortBar>
 				{/* 꽃다발 사진 그리드 */}
 				<BouquetListGrid>
-					{arrayOfArrays.map((item, idx) => {
-						return (
-							<StyledImageArea key={idx}>
-								<StyledBouquetImage onClick={() => openModal(idx)}></StyledBouquetImage>
-								<StyledDownloadButton onClick={() => downloadImage(item.$url)}>
-									<DownloadSpan className='material-symbols-outlined'>download</DownloadSpan>
-									<a href={item.$url} download></a>
-								</StyledDownloadButton>
-							</StyledImageArea>
-						);
-					})}
+					{bouquets.map((bouquet, index) => (
+						<StyledImageArea
+							key={bouquet.bouquetId}
+							ref={index === bouquets.length - 1 ? lastBouquetElementRef : null}
+						>
+							<StyledBouquetImage src={bouquet.imageUrl} onClick={() => openModal(bouquet)} onError={onErrorImg}></StyledBouquetImage>
+							<StyledDownloadButton onClick={() => downloadImage(bouquet.imageUrl)}>
+								<DownloadSpan className='material-symbols-outlined'>download</DownloadSpan>
+								<a href={bouquet.imageUrl} download></a>
+							</StyledDownloadButton>
+						</StyledImageArea>
+					))}
 				</BouquetListGrid>
 			</StyledBouquetListPage>
 			{/* 하단 메뉴바 */}
 			<Menu></Menu>
 			{/* 꽃다발 상세 정보 모달 */}
-			{isBouquetDetailModal && extractedItems.length > 0 && (
+			{isBouquetDetailModal && extractedItems && (
 				<BouquetDetailModal closeModal={closeModal} $flowers={extractedItems}></BouquetDetailModal>
 			)}
 		</>

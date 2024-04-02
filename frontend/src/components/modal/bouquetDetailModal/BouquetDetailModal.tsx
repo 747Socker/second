@@ -8,17 +8,12 @@ import {
 	StyledName,
 	StyledMeaning,
 } from './StyledBouquetDetailModal';
+import { Bouquet } from '../../../types/BouquetList';
 
 interface ModalProps {
 	closeModal: () => void;
-	$flowers: RecommendItem[];
+	$flowers: Bouquet;
 }
-
-type RecommendItem = {
-	$url: string;
-	$name: string;
-	$meaning: string[];
-};
 
 export const BouquetDetailModal = ({ closeModal, $flowers }: ModalProps) => {
 	return (
@@ -36,30 +31,13 @@ export const BouquetDetailModal = ({ closeModal, $flowers }: ModalProps) => {
 					<StyledConfirmInfo>
 						<TextAlign $align='left'>
 							{/* 구성된 꽃 목록을 loop */}
-							{$flowers &&
-								$flowers.length > 0 &&
-								$flowers.map((flower, index) => (
-									<div key={index}>
-										{/* 꽃 이름 */}
-										<StyledName $marginLeft='1.0vw' $marginTop='0.8vh'>
-											{flower.$name}
-										</StyledName>
-										<ul>
-											{/* 각 꽃마다 꽃말 loop */}
-											{flower.$meaning &&
-												flower.$meaning.length > 0 &&
-												flower.$meaning.map((meaning, meaningIndex) => (
-													<li key={meaningIndex}>
-														{/* 꽃말 */}
-														<StyledMeaning $marginLeft='0.5vw' $marginTop='0.5vh'>
-															{' '}
-															{'ㆍ'} {meaning}{' '}
-														</StyledMeaning>
-													</li>
-												))}
-										</ul>
-									</div>
-								))}
+							<StyledName $marginLeft='1.0vw' $marginTop='0.8vh'>
+								{$flowers.whom} - {$flowers.situation}
+							</StyledName>
+							<StyledMeaning $marginLeft='0.5vw' $marginTop='0.5vh'>
+								{' '}
+								{'ㆍ'} {$flowers.message}{' '}
+							</StyledMeaning>
 						</TextAlign>
 					</StyledConfirmInfo>
 				</StyledModal>

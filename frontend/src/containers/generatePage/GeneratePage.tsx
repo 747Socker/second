@@ -236,7 +236,7 @@ export const GeneratePage = () => {
 						<CustomButton $check={true} onClick={openModal}>
 							확인
 						</CustomButton>
-						{regeneCounter <= 3 && <CustomButton onClick={handleSubmit}>재생성</CustomButton>}
+						{regeneCounter < 3 && <CustomButton onClick={handleSubmit}>재생성</CustomButton>}
 					</div>
 				)}
 				{isMaking && (
