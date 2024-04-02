@@ -63,6 +63,7 @@ export const GeneratePage = () => {
 		console.log("useEffect");
 		console.log(requestId);
 		if (requestId) {
+			setIsMaking(true);
 			console.log("if");
 			setupSSE(requestId, {
 				onOpen: () => {				
@@ -76,14 +77,17 @@ export const GeneratePage = () => {
 					firstGenerateEvent: (data: any) => { // data 타입을 any로 지정, 더 구체적인 타입이 있다면 변경 가능
 						setBouquetData(data);
 						console.log('첫 번째 생성 이벤트 데이터 처리', data);
+						setIsMaking(false);
 					},
 					reGenerateEvent: (data: any) => { // data 타입을 any로 지정
 						setBouquetData(data);
 						console.log('재생성 이벤트 데이터 처리', data);
+						setIsMaking(false);
 					},
 					middleImageSendEvent: (data: any) => { // data 타입을 any로 지정
 						setBouquetUrl(data);
 						console.log('중간 이미지 전송 이벤트 데이터 처리', data);
+						setIsMaking(false);
 					}
 				}
 			});
