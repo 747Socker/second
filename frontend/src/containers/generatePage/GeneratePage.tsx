@@ -85,6 +85,7 @@ export const GeneratePage = () => {
 					middleImageSendEvent: (data: any) => { // data 타입을 any로 지정
 						setBouquetUrl(data);
 						console.log('중간 이미지 전송 이벤트 데이터 처리', data);
+						setIsMaking(false);
 					}
 				}
 			});

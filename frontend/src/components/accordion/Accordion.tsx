@@ -84,7 +84,6 @@ export const Accordion = ({
 		setEmpty(false);
 	}, [$recommendByMeaning]);
 
-	console.log($recommendByMeaning)
 	const meaningsByMeaning = $recommendByMeaning.meaning
 		? $recommendByMeaning.meaning.split(',').map((item) => item.trim())
 		: [];
