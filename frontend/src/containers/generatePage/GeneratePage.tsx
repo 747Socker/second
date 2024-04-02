@@ -203,7 +203,7 @@ export const GeneratePage = () => {
 
 	const onErrorImg = (e: any) => {
 		e.target.src = white;
-	};
+	}; // 이미지 깨짐 대용 이미지
 
 	return (
 		<>
@@ -212,7 +212,7 @@ export const GeneratePage = () => {
 				<Header></Header>
 				<StyledBouquetImage src={bouquetUrl} onError={onErrorImg}></StyledBouquetImage>
 				{/* 최초 추천 꽃 + 변경 추천 꽃 */}
-				{uf.map((item, index) => {
+				{!isMaking && uf.map((item, index) => {
 					return (
 						<Accordion
 							key={index}

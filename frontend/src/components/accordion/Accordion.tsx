@@ -136,6 +136,11 @@ export const Accordion = ({
 
 	const flowersBySelect = allFlowers.filter((flower) => flower.flowerId === $userSelectId && $userSelectId !== -1);
 
+	const toggleFlower = (index : number, flowerId : number) => {
+		changeFlower(index, flowerId)
+		toggleAccordion()
+	}
+
 	return (
 		<AccordionSection>
 			<div className='accordion__section'>
@@ -171,7 +176,7 @@ export const Accordion = ({
 					</AccordionText>
 					{/* 꽃말에 의한 추천 */}
 					{Array.isArray($meaning) && $meaning.length > 0 && (
-						<div onClick={() => changeFlower($index, $recommendByMeaning.flowerId)}>
+						<div onClick={() => toggleFlower($index, $recommendByMeaning.flowerId)}>
 							<FlowerCard
 								$bouquetUrl={$recommendByMeaning.imgUrl}
 								$isMain={false}
@@ -182,7 +187,7 @@ export const Accordion = ({
 						</div>
 					)}
 					{/* 색상에 의한 추천 */}
-					<div onClick={() => changeFlower($index, flowersByColor[recommendIndexByColor].flowerId)}>
+					<div onClick={() => toggleFlower($index, flowersByColor[recommendIndexByColor].flowerId)}>
 						{flowersByColor.length > recommendIndexByColor ? (
 							<FlowerCard
 								$bouquetUrl={flowersByColor[recommendIndexByColor].imgUrl}
@@ -196,7 +201,7 @@ export const Accordion = ({
 						)}
 					</div>
 					{/* 인기에 의한 추천 */}
-					<div onClick={() => changeFlower($index, flowersByPopularity[recommendIndexByPopularity].flowerId)}>
+					<div onClick={() => toggleFlower($index, flowersByPopularity[recommendIndexByPopularity].flowerId)}>
 						{flowersByPopularity.length > recommendIndexByPopularity ? (
 							<FlowerCard
 								$bouquetUrl={flowersByPopularity[recommendIndexByPopularity].imgUrl}
@@ -213,7 +218,7 @@ export const Accordion = ({
 					{$userSelectId === undefined || $userSelectId === -1 ? (
 						<EmptyFlowerCard $recommend={false} openListModal={openListModal}></EmptyFlowerCard>
 					) : (
-						<div onClick={() => changeFlower($index, $userSelectId)}>
+						<div onClick={() => toggleFlower($index, $userSelectId)}>
 							<FlowerCard
 								$bouquetUrl={flowersBySelect[0].imgUrl}
 								$isMain={false}

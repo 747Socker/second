@@ -88,7 +88,7 @@ export const StyledRecommend = styled.div<borderProps>`
 export const CloseSpan = styled.span`
 
 	&.material-symbols-outlined {
-		color: #e2d5e7;
+		color: #975aad;
 		font-size: 28px;
 
 		@media (min-width: 768px) {
