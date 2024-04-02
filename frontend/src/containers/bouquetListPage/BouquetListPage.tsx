@@ -30,6 +30,9 @@ export const BouquetListPage = () => {
 			searchKeyword: '',
 			orderBy: ''
 	});
+	const [isBouquetDetailModal, setIsBouquetDetailModal] = useState(false);
+	const [extractedItems, setExtractedItems] = useState<Bouquet>();
+
 	const { bouquets, loading, error, hasMore,fetchMoreData  } = useBouquetList(searchParams.type, searchParams.searchKeyword, searchParams.orderBy);
 
 	const observer = useRef<IntersectionObserver | null>(null);
@@ -60,9 +63,6 @@ export const BouquetListPage = () => {
 			});
 	};
 
-	const [isBouquetDetailModal, setIsBouquetDetailModal] = useState(false);
-	const [extractedItems, setExtractedItems] = useState<Bouquet>();
-
 	const html = document.querySelector('html');
 
 	const openModal = (bouquet : Bouquet) => {
@@ -87,8 +87,6 @@ export const BouquetListPage = () => {
 	const onErrorImg = (e: any) => {
 		e.target.src = white;
 	};
-
-	
 
 	return (
 		<>
@@ -117,7 +115,8 @@ export const BouquetListPage = () => {
 								<a href={bouquet.imageUrl} download></a>
 							</StyledDownloadButton>
 						</StyledImageArea>
-					))}
+					)
+					)}
 				</BouquetListGrid>
 			</StyledBouquetListPage>
 			{/* 하단 메뉴바 */}

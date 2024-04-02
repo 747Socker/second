@@ -23,7 +23,7 @@ export const SearchDropdown = ({ setType } : typeProp) => {
 	
 	return (
 		<>
-			<DropdownMain>
+			<DropdownMain style={{zIndex:'1'}}>
 				{/* 드롭다운 상단 위치 - 누른 것으로 바뀜 */}
 				<DropdownBar onClick={toggleDropdown}>{selectedMenu}
 				</DropdownBar>

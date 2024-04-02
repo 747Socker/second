@@ -4,7 +4,7 @@ interface Bouquet {
     situation: string;
     message: string;
     imageUrl: string;
-    flowerIds: number[];
+    flowerId: number[];
     memberId: number;
 }
 
