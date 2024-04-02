@@ -62,10 +62,10 @@ export const GeneratePage = () => {
 		console.log("useEffect");
 		console.log(requestId);
 		if (requestId) {
+			setIsMaking(true);
 			console.log("if");
 			setupSSE(requestId, {
-				onOpen: () => {
-					setIsMaking(true);
+				onOpen: () => {				
 					console.log('SSE 연결이 열림');
 				},
 				onError: (error: Event) => {
