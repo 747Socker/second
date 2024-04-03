@@ -25,7 +25,7 @@ export const useBouquetList = (type: string, searchKeyword: string, orderBy: str
                     type,
                     searchKeyword,
                     orderBy,
-                    size: 8,
+                    size: 4,
                     page,
                     ...(lastIndex !== null && { lastIndex })
                 },
