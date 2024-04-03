@@ -24,6 +24,12 @@ export const StyledLoadingButton = styled.button`
 	height: 35px;
 	width: 270px;
 
+	@media (min-width: 768px) {
+		width: 400px;
+		height: 40px;
+		font-size: 1.25rem;
+	}
+
 	border-radius: 30px;
 	border: none;
 	outline: none;
