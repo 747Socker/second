@@ -52,7 +52,6 @@ export const GeneratePage = () => {
 		console.log(requestId);
 		if (requestId) {
 			console.log("if");
-			setIsMaking(true)
 			setupSSE(requestId, {
 				onOpen: () => {				
 					console.log('SSE 연결이 열림');
