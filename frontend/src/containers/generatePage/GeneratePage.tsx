@@ -24,24 +24,22 @@ export const GeneratePage = () => {
 	const { bouquetUrl, usedFlower, recommendByMeaning, allFlowers, setBouquetData, setBouquetUrl } = bouquetStore();
 	const [isMakeModalOpened, setIsMakeModalOpened] = useState(false);
 	const [isListModalOpened, setIsListModalOpened] = useState(false);
-
-	const [isLoading, setIsLoading] = useState(true);
-	const axiosInstance = useLocalAxios(true);
 	// 확인 모달, 꽃 전체 리스트 모달 여부
+	const axiosInstance = useLocalAxios(true);
 
-	//const [bouquetImg, setBouquetImg] = useState("")
 	const [uf, setUf] = useState<FlowerDto[]>([]);
-	const [usedFlowerIndexs, setUsedFlowerIndexs] = useState<number[]>([]);
-	const [flowersByMeaning, setFlowersByMeaning] = useState<FlowerDto[]>([]);
-	const [selectIdByIndex, setSelectIdByIndex] = useState<number[]>([]);
-	const [userSelectIndex, setUserSelectIndex] = useState<number>(-1);
-	const [userSelectId, setUserSelectId] = useState<number>(-1);
-	const [isUsed, setIsUsed] = useState<boolean[]>([true, true, true]);
-	const [isMaking, setIsMaking] = useState<boolean>(false);
-	const [regeneCounter, setRegeneCounter] = useState<number>(0);
+	const [usedFlowerIndexs, setUsedFlowerIndexs] = useState<number[]>([]); // 사용하는 꽃
+	const [flowersByMeaning, setFlowersByMeaning] = useState<FlowerDto[]>([]); // 꽃말 추천 추출
+	const [selectIdByIndex, setSelectIdByIndex] = useState<number[]>([]); // 사용자가 추가한 꽃의 번호들
+	const [userSelectIndex, setUserSelectIndex] = useState<number>(-1); // 사용자가 꽃을 추가하려는 인덱스
+	const [userSelectId, setUserSelectId] = useState<number>(-1); // 사용자가 새로 추가한 꽃 id
+	const [isUsed, setIsUsed] = useState<boolean[]>([true, true, true]); // 현재 칸이 사용중인지
+	const [isMaking, setIsMaking] = useState<boolean>(false); // 생성중일 때 로딩
+	const [regeneCounter, setRegeneCounter] = useState<number>(0); // 재생성 횟수
 	// 유저가 선택한 각 꽃 별 추가 꽃
 	// 선택한 꽃의 위치(0, 1, 2)
 	// 유저가 선택한 꽃의 id
+	
 
 	const html = document.querySelector('html');
 	const location = useLocation();
@@ -190,7 +188,7 @@ export const GeneratePage = () => {
 		newState[index] = -1;
 		setSelectIdByIndex(newState.map((state) => state));
 		e.stopPropagation();
-	};
+	}; // 사용자가 추가한 꽃 삭제
 
 	const onErrorImg = (e: any) => {
 		e.target.src = white;
