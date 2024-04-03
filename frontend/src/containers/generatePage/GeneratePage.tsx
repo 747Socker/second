@@ -76,15 +76,17 @@ export const GeneratePage = () => {
 					firstGenerateEvent: (data: any) => { // data 타입을 any로 지정, 더 구체적인 타입이 있다면 변경 가능
 						setBouquetData(data);
 						console.log('첫 번째 생성 이벤트 데이터 처리', data);
-						
+						setIsMaking(false)
 					},
 					reGenerateEvent: (data: any) => { // data 타입을 any로 지정
 						setBouquetData(data);
 						console.log('재생성 이벤트 데이터 처리', data);
+						setIsMaking(false)
 					},
 					middleImageSendEvent: (data: any) => { // data 타입을 any로 지정
 						setBouquetUrl(data);
 						console.log('중간 이미지 전송 이벤트 데이터 처리', data);
+						setIsMaking(true)
 					}
 				}
 			})	
@@ -121,7 +123,6 @@ export const GeneratePage = () => {
 			.filter((flower) => flower !== undefined) as FlowerDto[];
 
 		setFlowersByMeaning(extractByMeaning);
-		setIsMaking(false)
 	}, [usedFlowerIndexs]);
 	// 꽃말로 추천할 목록 추출
 
