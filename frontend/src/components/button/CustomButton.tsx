@@ -6,6 +6,7 @@ interface ButtonProps {
 	$make?: boolean;
 	$check?: boolean;
 	$kakao?: boolean;
+	$deco?: boolean;
 	onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 	children: React.ReactNode;
 }
@@ -51,7 +52,7 @@ const StyledButton = styled.button<ButtonProps>`
 		$make &&
 		css`
 			background: #fff6f2;
-
+			
 			&:hover {
 				background: #e8e1dd;
 			}
@@ -90,10 +91,23 @@ const StyledButton = styled.button<ButtonProps>`
 				font-size: 0.925rem;
 			}
 		`}
+
+		${({ $deco }) =>
+		$deco &&
+		css`
+			background: #FFD9E5;
+			box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+			
+			margin-left: 5vw;
+
+			&:hover {
+				background: #e8e1dd;
+			}
+		`}
 `;
 
-const CustomButton: React.FC<ButtonProps> = ({ children, size = 'medium', $make, $check, $kakao, onClick }) => (
-	<StyledButton size={size} $make={$make} $check={$check} $kakao={$kakao} onClick={onClick}>
+const CustomButton: React.FC<ButtonProps> = ({ children, size = 'medium', $make, $check, $kakao, $deco, onClick }) => (
+	<StyledButton size={size} $make={$make} $check={$check} $kakao={$kakao} $deco={$deco} onClick={onClick}>
 		{children}
 	</StyledButton>
 );

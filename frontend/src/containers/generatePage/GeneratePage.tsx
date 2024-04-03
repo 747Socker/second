@@ -1,6 +1,6 @@
 import { Accordion } from '../../components/accordion/Accordion';
 import { Header } from '../../components/header/Headerbar';
-import { StyledGeneratePage, StyledBouquetImage } from './StyledGeneratePage';
+import { StyledGeneratePage, StyledBouquetImage, StyledLoadingButton } from './StyledGeneratePage';
 import { useEffect, useState } from 'react';
 import { MakeModal } from '../../components/modal/makeModal/MakeModal';
 import { FlowerListModal } from '../../components/modal/flowerModal/FlowerListModal';
@@ -19,18 +19,6 @@ type FlowerDto = {
 	meaning: string;
 	imgUrl: string;
 };
-interface SSEEventCallback {
-	(data: any): void;
-}
-
-interface SSECallbacks {
-	onOpen?: () => void;
-	onError?: (error: Event) => void;
-	events?: {
-		[eventType: string]: SSEEventCallback;
-	};
-}
-
 
 export const GeneratePage = () => {
 	const { bouquetUrl, usedFlower, recommendByMeaning, allFlowers, setBouquetData, setBouquetUrl } = bouquetStore();
@@ -232,16 +220,16 @@ export const GeneratePage = () => {
 					);
 				})}
 				{!isMaking && (
-					<div style={{ marginBottom: '2vh' }}>
+					<div style={{ marginBottom: '2vh', justifyContent:'space-around'}}>
 						<CustomButton $check={true} onClick={openModal}>
 							확인
 						</CustomButton>
-						{regeneCounter < 3 && <CustomButton onClick={handleSubmit}>재생성</CustomButton>}
+						{regeneCounter < 3 && <CustomButton $deco={true} onClick={handleSubmit}>재생성</CustomButton>}
 					</div>
 				)}
 				{isMaking && (
 					<div style={{ marginBottom: '2vh' }}>
-						<CustomButton $check={true}>생성 중...</CustomButton>
+						<StyledLoadingButton>당신의 마음을 담은 꽃다발을 만들고 있어요!</StyledLoadingButton>
 					</div>
 				)}
 			</StyledGeneratePage>
