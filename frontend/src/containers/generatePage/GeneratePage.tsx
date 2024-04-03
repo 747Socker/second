@@ -64,7 +64,7 @@ export const GeneratePage = () => {
 		console.log(requestId);
 		if (requestId) {
 			console.log("if");
-			setIsMaking(true);
+			setIsMaking(true)
 			setupSSE(requestId, {
 				onOpen: () => {				
 					console.log('SSE 연결이 열림');
@@ -76,6 +76,7 @@ export const GeneratePage = () => {
 					firstGenerateEvent: (data: any) => { // data 타입을 any로 지정, 더 구체적인 타입이 있다면 변경 가능
 						setBouquetData(data);
 						console.log('첫 번째 생성 이벤트 데이터 처리', data);
+						
 					},
 					reGenerateEvent: (data: any) => { // data 타입을 any로 지정
 						setBouquetData(data);
@@ -86,10 +87,7 @@ export const GeneratePage = () => {
 						console.log('중간 이미지 전송 이벤트 데이터 처리', data);
 					}
 				}
-			});
-			return () => {
-				setIsMaking(false);
-			};	
+			})	
 		}
 	}, [requestId]);
 
@@ -103,8 +101,6 @@ export const GeneratePage = () => {
 		setSelectIdByIndex(new Array(usedFlower.length).fill(-1));
 		setIsUsed(Array.from({ length: usedFlower.length }, () => true));
 
-		setIsMaking(false);
-
 		return unsubscribe;
 	}, [usedFlower]);
 
@@ -113,6 +109,7 @@ export const GeneratePage = () => {
 			.map((index) => allFlowers.find((flower) => flower.flowerId === index))
 			.filter((flower) => flower !== undefined) as FlowerDto[];
 		setUf(extractFlower);
+		
 		// 사용된 꽃 목록 추출
 	}, [usedFlowerIndexs]);
 
@@ -124,6 +121,7 @@ export const GeneratePage = () => {
 			.filter((flower) => flower !== undefined) as FlowerDto[];
 
 		setFlowersByMeaning(extractByMeaning);
+		setIsMaking(false)
 	}, [usedFlowerIndexs]);
 	// 꽃말로 추천할 목록 추출
 
@@ -212,7 +210,8 @@ export const GeneratePage = () => {
 				<Header></Header>
 				<StyledBouquetImage src={bouquetUrl} onError={onErrorImg}></StyledBouquetImage>
 				{/* 최초 추천 꽃 + 변경 추천 꽃 */}
-				{!isMaking && uf.map((item, index) => {
+				{!isMaking && uf.map((item, index) => 
+				{	
 					return (
 						<Accordion
 							key={index}
