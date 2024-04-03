@@ -17,6 +17,7 @@ interface BouquetState {
     allFlowers: FlowerDto[];
     setBouquetData: (data: BouquetUpdateData) => void;
     setBouquetUrl: (data: string) => void;
+    clearBouquet: () => void;
 }
 
 interface BouquetUpdateData {
@@ -45,4 +46,15 @@ export const bouquetStore = create<BouquetState>((set: SetState<BouquetState>, g
         });
     },
     setBouquetUrl: (data:string) => set(state => ({ bouquetUrl: data })),
+    clearBouquet: () => {
+        set({
+            bouquetUrl: '',
+            apiUsageCount: 0,
+            usedFlower: [],
+            recommendByMeaning: [],
+            recommendByPopularity: [],
+            allFlowers: [],
+        });
+    },
+
 }));

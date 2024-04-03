@@ -4,13 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import make from './../../assets/images/make.svg'
 import search from './../../assets/images/search.svg'
 import find from './../../assets/images/find.svg'
-
+import {bouquetStore} from '../../stores/bouquetStore';
 
 export const Menu = () => {
 
   const navigate = useNavigate();
+  const { bouquetUrl,clearBouquet} = bouquetStore.getState();
 
   const goToGenerate = () => {
+        clearBouquet();
 		navigate('/index');
 	};
 

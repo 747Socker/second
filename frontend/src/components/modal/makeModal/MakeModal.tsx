@@ -19,7 +19,7 @@ interface ModalProps {
 }
 
 export const MakeModal = ({ closeModal, axiosInstance }: ModalProps) => {
-	const { bouquetUrl } = bouquetStore.getState();
+	const { bouquetUrl} = bouquetStore.getState();
 
 	const navigate = useNavigate();
 

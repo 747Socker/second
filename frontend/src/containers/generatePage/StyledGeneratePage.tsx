@@ -20,9 +20,9 @@ export const StyledBouquetImage = styled.img`
 	margin-bottom: 2vh;
 `; // 꽃다발 이미지
 
-export const StyledLoadingButton = styled.button`
+export const StyledLoadingButton = styled.button`	
 	height: 35px;
-	width: 280px;
+	width: 270px;
 
 	border-radius: 30px;
 	border: none;

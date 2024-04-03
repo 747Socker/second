@@ -51,8 +51,8 @@ export const GeneratePage = () => {
 		console.log("useEffect");
 		console.log(requestId);
 		if (requestId) {
+			setIsMaking(true);
 			console.log("if");
-			setIsMaking(true)
 			setupSSE(requestId, {
 				onOpen: () => {				
 					console.log('SSE 연결이 열림');
@@ -90,6 +90,8 @@ export const GeneratePage = () => {
 		});
 		setSelectIdByIndex(new Array(usedFlower.length).fill(-1));
 		setIsUsed(Array.from({ length: usedFlower.length }, () => true));
+
+		setIsMaking(false);
 
 		return unsubscribe;
 	}, [usedFlower]);

@@ -20,6 +20,8 @@ import { useBouquetList } from '../../api/useBouquetList';
 import { Bouquet } from '../../types/BouquetList'
 import CustomButton from '../../components/button/CustomButton';
 import white from '../../assets/images/white.jpg'
+import {downloadBouquetImage} from "../../api/bouquetDown.ts";
+import {useLocalAxios} from "../../utils/axios.ts";
 
 export const BouquetListPage = () => {
 	const [type, setType] = useState('');
@@ -34,7 +36,7 @@ export const BouquetListPage = () => {
 	const [extractedItems, setExtractedItems] = useState<Bouquet>();
 
 	const { bouquets, loading, error, hasMore,fetchMoreData  } = useBouquetList(searchParams.type, searchParams.searchKeyword, searchParams.orderBy);
-
+	const axiosInstance = useLocalAxios(true);
 	const observer = useRef<IntersectionObserver | null>(null);
 	const lastBouquetElementRef = useCallback((node: Element | null) => {
 			if (loading || !hasMore) return;
@@ -77,11 +79,21 @@ export const BouquetListPage = () => {
 		html?.classList.remove('scroll-locked');
 	};
 
-	const downloadImage = (url: string) => {
-		const link = document.createElement('a');
-		link.href = url;
-		link.setAttribute('download', 'flower_image');
-		link.click();
+	const downloadImage = async (url: string, bouquetId: number) => {
+		try {
+			// API를 통해 서버에 다운로드 정보 전송
+			await downloadBouquetImage(bouquetId, axiosInstance);
+
+			// 이미지 다운로드 처리
+			const link = document.createElement('a');
+			link.href = url;
+			link.setAttribute('download', 'flower_image');
+			document.body.appendChild(link); // 이 부분을 추가해야 합니다.
+			link.click();
+			link.remove(); // 클릭 후 링크 제거
+		} catch (error) {
+			console.error("다운로드 처리 중 오류 발생:", error);
+		}
 	};
 
 	const onErrorImg = (e: any) => {
@@ -110,7 +122,7 @@ export const BouquetListPage = () => {
 							ref={index === bouquets.length - 1 ? lastBouquetElementRef : null}
 						>
 							<StyledBouquetImage src={bouquet.imageUrl} onClick={() => openModal(bouquet)} onError={onErrorImg}></StyledBouquetImage>
-							<StyledDownloadButton onClick={() => downloadImage(bouquet.imageUrl)}>
+							<StyledDownloadButton onClick={() => downloadImage(bouquet.imageUrl, bouquet.bouquetId)}>
 								<DownloadSpan className='material-symbols-outlined'>download</DownloadSpan>
 								<a href={bouquet.imageUrl} download></a>
 							</StyledDownloadButton>
