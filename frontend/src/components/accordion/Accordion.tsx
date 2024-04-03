@@ -84,7 +84,7 @@ export const Accordion = ({
 		setEmpty(false);
 	}, [$recommendByMeaning]);
 
-	const meaningsByMeaning = $recommendByMeaning.meaning
+	const meaningsByMeaning = Array.isArray($recommendByMeaning.meaning)
 		? $recommendByMeaning.meaning.split(',').map((item) => item.trim())
 		: [];
 	// 꽃말에 의한 추천, 꽃말만 추출 후 분리
