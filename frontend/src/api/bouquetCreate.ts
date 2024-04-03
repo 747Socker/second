@@ -10,7 +10,7 @@ export const postTextInputs = async (inputs: TextInputs, axiosInstance: AxiosIns
     try {
         const response = await axiosInstance.post('/bouquet/text-input', inputs);
         const requestId = response.data;
-        console.log("텍스트 입력 완료, requestID:", requestId);
+      //  console.log("텍스트 입력 완료, requestID:", requestId);
         return requestId;
     } catch (error) {
         console.error(error);
