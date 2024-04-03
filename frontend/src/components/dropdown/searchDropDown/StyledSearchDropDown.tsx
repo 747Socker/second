@@ -22,7 +22,7 @@ export const DropdownBar = styled.div`
 	// 커서가 올라오면 손모양 커서로 변경
 
 	font-size: 1.2rem;
-	color: #ffffff;
+	color: black;
 
 	width: 100px;
 	height: 35px;
@@ -35,7 +35,7 @@ export const DropdownBar = styled.div`
 		width: 70px;
 	}
 
-	background:  #4a66ff;
+	background:  #FFD9E5;
 
 	border-radius: 30px;
 `; // 드롭 다운 상단
@@ -55,7 +55,7 @@ export const DropdownMenu = styled.div<dropdownProp>`
 		width: 75px;
 	}
 
-	background: linear-gradient(to bottom, #4a66ff, #b636cd);
+	background: linear-gradient(to bottom, #FFD9E5, #b636cd);
 	// 색상 그라데이션 - 아래로 방향으로 진행됨
 
 	border-radius: 5%;
@@ -81,7 +81,7 @@ export const DropdownMenu = styled.div<dropdownProp>`
 export const DropdownMenuText = styled.button`
 	font-family: 'Cafe 24 Oneprettynight-v2.0';
 	text-align: center;
-	color: #ffffff;
+	color: black;
 	text-decoration: none;
 	// 텍스트를 선으로 꾸미는 요소
 	font-size: 1.2rem;

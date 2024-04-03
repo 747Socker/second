@@ -111,9 +111,9 @@ export const BouquetListPage = () => {
 					<StyledInput onChange={e => setSearchKeyword(e.target.value)}></StyledInput>
 					<CustomButton $check={true} onClick={handleSearch}>검색</CustomButton>
 				</SearchBar>
-				<SortBar>
-					<SortDropdown setOrderBy={setOrderBy}></SortDropdown>
-				</SortBar>
+				{/*<SortBar>*/}
+				{/*	<SortDropdown setOrderBy={setOrderBy}></SortDropdown>*/}
+				{/*</SortBar>*/}
 				{/* 꽃다발 사진 그리드 */}
 				<BouquetListGrid>
 					{bouquets.map((bouquet, index) => (

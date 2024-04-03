@@ -53,6 +53,7 @@ export const GeneratePage = () => {
 			setupSSE(requestId, {
 				onOpen: () => {				
 					console.log('SSE 연결이 열림');
+					setIsMaking(true)
 				},
 				onError: (error: Event) => {
 					console.error('SSE 에러 발생', error);
