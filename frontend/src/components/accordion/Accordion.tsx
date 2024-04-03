@@ -110,14 +110,15 @@ export const Accordion = ({
 	// 이후 선정된 꽃의 꽃말 분리
 
 	// 인기도에 의한 추천
-	const flowersByPopularity = allFlowers.filter(
+	const flowersByPopularity = recommendByPopularity ? 
+	allFlowers.filter(
 		(flower) =>
 			!(flower.name === $recommendByMeaning.name) &&
 			flowersByColor.length > recommendIndexByColor &&
 			!(flower.name === flowersByColor[recommendIndexByColor].name) &&
 			!(flower.name === $name) &&
 			recommendByPopularity.includes(flower.flowerId),
-	); // 꽃말에 의한 추천, 색에 의한 추천, 원래 꽃을 제외하고
+	) : []; // 꽃말에 의한 추천, 색에 의한 추천, 원래 꽃을 제외하고
 	// 그 중에서 인기도에 의한 추천에 해당하는 꽃을 추출
 
 	useEffect(() => {
@@ -202,7 +203,8 @@ export const Accordion = ({
 					</div>
 					{/* 인기에 의한 추천 */}
 					<div onClick={() => toggleFlower($index, flowersByPopularity[recommendIndexByPopularity].flowerId)}>
-						{flowersByPopularity.length > recommendIndexByPopularity ? (
+						{flowersByPopularity.length > recommendIndexByPopularity && 
+						Array.isArray(meaningsByPopularity) && meaningsByPopularity.length > 0? (
 							<FlowerCard
 								$bouquetUrl={flowersByPopularity[recommendIndexByPopularity].imgUrl}
 								$isMain={false}
