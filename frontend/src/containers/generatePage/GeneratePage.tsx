@@ -86,6 +86,7 @@ export const GeneratePage = () => {
 
 			const limitedUsedFlower = usedFlowerState.usedFlower.slice(0, 3);
 			setUsedFlowerIndexs(limitedUsedFlower.map((flower) => flower));
+			setIsMaking(true)
 		});
 		setSelectIdByIndex(new Array(usedFlower.length).fill(-1));
 		setIsUsed(Array.from({ length: usedFlower.length }, () => true));
@@ -220,12 +221,12 @@ export const GeneratePage = () => {
 						></Accordion>
 					);
 				})}
-				{!isMaking && (
+				{usedFlower.length === 0 || !isMaking && (
 					<div style={{ marginBottom: '2vh', justifyContent:'space-around'}}>
 						<CustomButton $check={true} onClick={openModal}>
 							확인
 						</CustomButton>
-						{regeneCounter < 3 && <CustomButton $deco={true} onClick={handleSubmit}>재생성</CustomButton>}
+						{<CustomButton $deco={true} onClick={handleSubmit}>재생성</CustomButton>}
 					</div>
 				)}
 				{isMaking && (
