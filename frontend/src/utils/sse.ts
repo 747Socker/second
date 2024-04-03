@@ -39,7 +39,7 @@ const setupSSE = (requestId: string, callbacks: SSECallbacks) => {
                 eventCallback(data);
             });
         }
-    }
+    } 
 
     eventSource.onerror = (error) => {
         console.error('SSE error:', error);
