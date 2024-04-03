@@ -51,14 +51,16 @@ export const GeneratePage = () => {
 		console.log("useEffect");
 		console.log(requestId);
 		if (requestId) {
-			setIsMaking(true);
 			console.log("if");
+			setIsMaking(true)
 			setupSSE(requestId, {
 				onOpen: () => {				
 					console.log('SSE 연결이 열림');
+					setIsMaking(true)
 				},
 				onError: (error: Event) => {
 					console.error('SSE 에러 발생', error);
+					setIsMaking(false)
 				},
 				events: {
 					firstGenerateEvent: (data: any) => { // data 타입을 any로 지정, 더 구체적인 타입이 있다면 변경 가능
