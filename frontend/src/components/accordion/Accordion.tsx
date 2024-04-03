@@ -90,9 +90,12 @@ export const Accordion = ({
 			: [];
 	// 꽃말에 의한 추천, 꽃말만 추출 후 분리
 
-	const flowersByColor = allFlowers.filter(
-		(flower) => $color === flower.color && !($name === flower.name) && !(flower.name === $recommendByMeaning.name),
-	);
+	const flowersByColor = $recommendByMeaning
+		? allFlowers.filter(
+				(flower) =>
+					$color === flower.color && !($name === flower.name) && !(flower.name === $recommendByMeaning.name),
+			)
+		: allFlowers.filter((flower) => $color === flower.color && !($name === flower.name));
 
 	useEffect(() => {
 		let randomIndex = Math.floor(Math.random() * flowersByColor.length);
@@ -111,8 +114,15 @@ export const Accordion = ({
 	// 이후 선정된 꽃의 꽃말 분리
 
 	// 인기도에 의한 추천
-	const flowersByPopularity =
-		recommendByPopularity.length > 0
+	const flowersByPopularity = !$recommendByMeaning
+		? allFlowers.filter(
+				(flower) =>
+					flowersByColor.length > recommendIndexByColor &&
+					!(flower.name === flowersByColor[recommendIndexByColor].name) &&
+					!(flower.name === $name) &&
+					recommendByPopularity.includes(flower.flowerId),
+			)
+		: recommendByPopularity.length > 0
 			? allFlowers.filter(
 					(flower) =>
 						!(flower.name === $recommendByMeaning.name) &&
