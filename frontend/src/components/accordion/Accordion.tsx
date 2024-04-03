@@ -84,9 +84,10 @@ export const Accordion = ({
 		setEmpty(false);
 	}, [$recommendByMeaning]);
 
-	const meaningsByMeaning = Array.isArray($recommendByMeaning.meaning)
-		? $recommendByMeaning.meaning.split(',').map((item) => item.trim())
-		: [];
+	const meaningsByMeaning =
+		$recommendByMeaning && Array.isArray($recommendByMeaning.meaning) && $recommendByMeaning.meaning.length > 0
+			? $recommendByMeaning.meaning.split(',').map((item) => item.trim())
+			: [];
 	// 꽃말에 의한 추천, 꽃말만 추출 후 분리
 
 	const flowersByColor = allFlowers.filter(
@@ -110,15 +111,17 @@ export const Accordion = ({
 	// 이후 선정된 꽃의 꽃말 분리
 
 	// 인기도에 의한 추천
-	const flowersByPopularity = recommendByPopularity.length > 0 ? 
-	allFlowers.filter(
-		(flower) =>
-			!(flower.name === $recommendByMeaning.name) &&
-			flowersByColor.length > recommendIndexByColor &&
-			!(flower.name === flowersByColor[recommendIndexByColor].name) &&
-			!(flower.name === $name) &&
-			recommendByPopularity.includes(flower.flowerId),
-	) : []; // 꽃말에 의한 추천, 색에 의한 추천, 원래 꽃을 제외하고
+	const flowersByPopularity =
+		recommendByPopularity.length > 0
+			? allFlowers.filter(
+					(flower) =>
+						!(flower.name === $recommendByMeaning.name) &&
+						flowersByColor.length > recommendIndexByColor &&
+						!(flower.name === flowersByColor[recommendIndexByColor].name) &&
+						!(flower.name === $name) &&
+						recommendByPopularity.includes(flower.flowerId),
+				)
+			: []; // 꽃말에 의한 추천, 색에 의한 추천, 원래 꽃을 제외하고
 	// 그 중에서 인기도에 의한 추천에 해당하는 꽃을 추출
 
 	useEffect(() => {
@@ -137,10 +140,10 @@ export const Accordion = ({
 
 	const flowersBySelect = allFlowers.filter((flower) => flower.flowerId === $userSelectId && $userSelectId !== -1);
 
-	const toggleFlower = (index : number, flowerId : number) => {
-		changeFlower(index, flowerId)
-		toggleAccordion()
-	} // 꽃 교체, 교체 시 아코디언도 닫히도록 설정
+	const toggleFlower = (index: number, flowerId: number) => {
+		changeFlower(index, flowerId);
+		toggleAccordion();
+	}; // 꽃 교체, 교체 시 아코디언도 닫히도록 설정
 
 	return (
 		<AccordionSection>
@@ -203,9 +206,11 @@ export const Accordion = ({
 					</div>
 					{/* 인기에 의한 추천 */}
 					<div onClick={() => toggleFlower($index, flowersByPopularity[recommendIndexByPopularity].flowerId)}>
-						{flowersByPopularity.length > recommendIndexByPopularity && flowersByPopularity.length > 0 &&
-						(Array.isArray(recommendByPopularity) && recommendByPopularity.length > 0) ? (
-							<FlowerCard 
+						{flowersByPopularity.length > recommendIndexByPopularity &&
+						flowersByPopularity.length > 0 &&
+						Array.isArray(recommendByPopularity) &&
+						recommendByPopularity.length > 0 ? (
+							<FlowerCard
 								$bouquetUrl={flowersByPopularity[recommendIndexByPopularity].imgUrl}
 								$isMain={false}
 								$name={flowersByPopularity[recommendIndexByPopularity].name}
