@@ -1,0 +1,116 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.3'
+	id 'io.spring.dependency-management' version '1.1.4'
+
+	id "org.sonarqube" version "4.2.0.3129"
+}
+
+group = 'com.ssafy'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	// 시큐리티 디펜던시 추가
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	//validation
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
+
+	// aws S3
+	implementation 'com.amazonaws:aws-java-sdk-lambda:1.12.641'
+	implementation 'com.amazonaws:aws-java-sdk-core:1.12.641'
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.641'
+	implementation 'com.amazonaws:jmespath-java:1.12.641'
+
+	//DB
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	runtimeOnly 'com.h2database:h2'
+
+	// redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// cache
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+
+	// actuator for health-check
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	// MapStruct
+	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+//	runtimeOnly 'com.h2database:h2'
+	implementation 'com.google.code.gson:gson:2.8.7'
+
+	//test 롬복 사용
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	//Querydsl 추가
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+}
+
+// querydsl 저장 위치
+def querydslSrcDir = 'src/main/generated'
+tasks.withType(JavaCompile) {
+	options.generatedSourceOutputDirectory = file(querydslSrcDir)
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+clean {
+	// clean 실행 시 생성된 QClass 삭제
+	delete file('src/main/generated')
+}
+
+sonarqube {
+    properties {
+		property "sonar.host.url", "https://sonarqube.ssafy.com/"
+        property "sonar.projectKey", "flowermari"
+
+        property "sonar.java.binaries", "${buildDir}/classes/java/main"
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.sources", "src/main/java"
+        // property "sonar.exclusions", "**/util/**, **/support/**, **/dto/**"
+
+        property "sonar.tests", "src/test/java"
+        property "sonar.test.inclusions", "**/*Test.java"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+    }
+}
